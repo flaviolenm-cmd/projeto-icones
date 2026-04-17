@@ -2977,20 +2977,30 @@ async function buildSvgMarkup(font, text, width = 1600, height = 260, fill = "me
 </svg>`.trim();
  }
 
- const fontSize = fitSvgTextSize(
+ const compositeFit = fitSvgTextComposite(
   text,
   font.cssFamily,
+  icon,
   width * previewFit.widthRatio,
   height * previewFit.heightRatio,
-  previewFit
+  previewFit,
+  iconOptions
  );
- const textBounds = measureSvgTextBounds(text, font.cssFamily, fontSize, width, height);
- const iconPlacement = getStandaloneIconPlacement(icon, width, height, textBounds, iconOptions);
+ const compositeLayout = compositeFit.layout;
+ const offsetX = (width / 2) - ((compositeLayout.minX + compositeLayout.maxX) / 2);
+ const offsetY = (height / 2) - ((compositeLayout.minY + compositeLayout.maxY) / 2);
+ const textX = offsetX + ((compositeLayout.box.x1 + compositeLayout.box.x2) / 2);
+ const textY = offsetY + ((compositeLayout.box.y1 + compositeLayout.box.y2) / 2);
+ const iconPlacement = {
+  x:offsetX + compositeLayout.iconLeft,
+  y:offsetY + compositeLayout.iconTop,
+  height:compositeLayout.iconHeight
+ };
 
  return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block">
  ${fillConfig.defs}
- <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="${escapeXml(font.cssFamily)}" font-size="${fontSize}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}>${escapeXml(text)}</text>
+ <text x="${textX}" y="${textY}" text-anchor="middle" dominant-baseline="middle" font-family="${escapeXml(font.cssFamily)}" font-size="${compositeFit.size}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}>${escapeXml(text)}</text>
  ${buildPositionedIconMarkup(icon, iconPlacement.x, iconPlacement.y, iconPlacement.height, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation, { interactive:true })}
 </svg>`.trim();
 }
@@ -3094,12 +3104,16 @@ async function buildOutlinedSvgMarkup(fontObject, text, width, height, responsiv
 </svg>`.trim();
  }
 
- const fit = fitOpenTypeSize(fontObject, text, width * widthRatio, height * heightRatio, options);
- const textX = (width / 2) - ((fit.box.x1 + fit.box.x2) / 2);
- const textY = (height / 2) - ((fit.box.y1 + fit.box.y2) / 2);
+ const fit = fitOpenTypeComposite(fontObject, text, icon, width * widthRatio, height * heightRatio, options, iconOptions);
+ const layout = fit.layout;
+ const textX = (width / 2) - ((layout.minX + layout.maxX) / 2);
+ const textY = (height / 2) - ((layout.minY + layout.maxY) / 2);
  const textPath = fontObject.getPath(text, textX, textY, fit.size, { kerning:true });
- const textBounds = textPath.getBoundingBox();
- const iconPlacement = getStandaloneIconPlacement(icon, width, height, textBounds, iconOptions);
+ const iconPlacement = {
+  x:textX + layout.iconLeft,
+  y:textY + layout.iconTop,
+  height:layout.iconHeight
+ };
 
  return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" ${sizeAttrs}>
