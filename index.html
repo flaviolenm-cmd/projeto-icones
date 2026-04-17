@@ -2983,20 +2983,49 @@ async function buildSvgMarkup(font, text, width = 1600, height = 260, fill = "me
 </svg>`.trim();
  }
 
- const fontSize = fitSvgTextSize(
+ let fontSize = fitSvgTextSize(
   text,
   font.cssFamily,
   width * previewFit.widthRatio,
   height * previewFit.heightRatio,
   previewFit
  );
- const textBounds = measureSvgTextBounds(text, font.cssFamily, fontSize, width, height);
- const iconPlacement = getStandaloneIconPlacement(icon, width, height, textBounds, iconOptions);
+ let textX = width / 2;
+ let textY = height / 2;
+ let iconPlacement = getStandaloneIconPlacement(icon, width, height, null, iconOptions);
+
+ if(icon){
+  const compositeFit = fitSvgTextComposite(
+   text,
+   font.cssFamily,
+   icon,
+   width * previewFit.widthRatio,
+   height * previewFit.heightRatio,
+   previewFit,
+   iconOptions
+  );
+  fontSize = compositeFit.size;
+
+  const layout = compositeFit.layout;
+  const groupLeft = (width - compositeFit.combinedWidth) / 2;
+  const groupTop = (height - compositeFit.combinedHeight) / 2;
+  const textCenterXInGroup = (-layout.minX) + ((layout.box.x1 + layout.box.x2) / 2);
+  const textCenterYInGroup = (-layout.minY) + ((layout.box.y1 + layout.box.y2) / 2);
+
+  textX = groupLeft + textCenterXInGroup;
+  textY = groupTop + textCenterYInGroup;
+  iconPlacement = {
+   x:groupLeft + ((-layout.minX) + layout.iconLeft),
+   y:groupTop + ((-layout.minY) + layout.iconTop),
+   width:layout.iconWidth,
+   height:layout.iconHeight
+  };
+ }
 
  return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block">
  ${fillConfig.defs}
- <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="${escapeXml(font.cssFamily)}" font-size="${fontSize}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}>${escapeXml(text)}</text>
+ <text x="${textX}" y="${textY}" text-anchor="middle" dominant-baseline="middle" font-family="${escapeXml(font.cssFamily)}" font-size="${fontSize}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}>${escapeXml(text)}</text>
  ${buildPositionedIconMarkup(icon, iconPlacement.x, iconPlacement.y, iconPlacement.height, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation, { interactive:true })}
 </svg>`.trim();
 }
