@@ -166,6 +166,25 @@ body > :not(script):not(.watermark-layer){
  opacity:0.6;
 }
 
+.section-title-primary{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+ max-width:420px;
+ margin:0 auto 10px;
+ padding:12px 18px;
+ border:2px solid #000000;
+ border-radius:999px;
+ background:#000000;
+ color:#ffffff;
+ text-align:center;
+ font-weight:800;
+ letter-spacing:0.02em;
+ opacity:1;
+ box-sizing:border-box;
+}
+
 .notice{
  position:fixed;
  left:12px;
@@ -280,12 +299,115 @@ body > :not(script):not(.watermark-layer){
  pointer-events:none;
 }
 
+.item.team-crest-mode .bottle{
+ max-width:360px;
+ aspect-ratio:3860 / 11150;
+}
+
+.item.team-crest-mode .bottle-shadow{
+ left:31%;
+ right:31%;
+ bottom:-6px;
+ height:26px;
+}
+
+.item.team-crest-mode .bottle-preview{
+ left:19%;
+ right:19%;
+ top:18%;
+ bottom:13%;
+ padding:0;
+}
+
+.item.team-crest-mode .bottle-preview::before{
+ left:17%;
+ right:17%;
+ top:10%;
+ bottom:14%;
+ height:auto;
+ border-radius:40px;
+ background:linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 42%, rgba(255,255,255,0) 100%);
+}
+
+.item.team-crest-mode .icon-resize-panel{
+ right:50%;
+ bottom:6%;
+ transform:translateX(50%);
+}
+
 .preview-svg{
  width:100%;
  height:100%;
  display:block;
  position:relative;
  z-index:1;
+}
+
+.preview-svg svg{
+ width:100%;
+ height:100%;
+ display:block;
+ overflow:visible;
+}
+
+.preview-icon-hit{
+ cursor:grab;
+ touch-action:none;
+}
+
+.preview-icon-hit:active{
+ cursor:grabbing;
+}
+
+.icon-resize-panel{
+ position:absolute;
+ right:3.5%;
+ bottom:8%;
+ z-index:4;
+ display:none;
+ align-items:center;
+ gap:8px;
+ padding:6px 8px;
+ border-radius:999px;
+ background:rgba(6,6,6,0.92);
+ border:1px solid rgba(255,255,255,0.18);
+ box-shadow:0 10px 24px rgba(0,0,0,0.22);
+ backdrop-filter:blur(8px);
+}
+
+.item.icon-resize-open .icon-resize-panel{
+ display:flex;
+}
+
+.icon-resize-label{
+ font-size:11px;
+ font-weight:800;
+ letter-spacing:0.03em;
+ text-transform:uppercase;
+ color:#ffffff;
+ white-space:nowrap;
+}
+
+.icon-resize-button{
+ width:30px;
+ height:30px;
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ border:none;
+ border-radius:50%;
+ background:#ffffff;
+ color:#111111;
+ font-size:18px;
+ font-weight:900;
+ line-height:1;
+ cursor:pointer;
+ box-shadow:0 4px 10px rgba(0,0,0,0.2);
+ touch-action:manipulation;
+}
+
+.icon-resize-button:active{
+ transform:translateY(1px);
 }
 
 .bottle-tools{
@@ -426,21 +548,6 @@ body > :not(script):not(.watermark-layer){
  margin-bottom:14px;
 }
 
-.icon-menu-header-layout{
- display:grid;
- grid-template-columns:minmax(150px, 178px) minmax(0, 1fr);
- gap:12px;
- align-items:start;
-}
-
-.icon-clear-column .icon-menu-grid{
- grid-template-columns:1fr;
-}
-
-.icon-clear-column .icon-option{
- min-height:124px;
-}
-
 .icon-menu-grid{
  display:grid;
  grid-template-columns:repeat(auto-fit, minmax(126px, 1fr));
@@ -483,7 +590,13 @@ body > :not(script):not(.watermark-layer){
  display:flex;
  align-items:center;
  justify-content:center;
- color:#111111;
+ color:#cfd5db;
+}
+
+.icon-option-art svg{
+ width:100%;
+ height:100%;
+ display:block;
 }
 
 .icon-option-art img{
@@ -506,129 +619,61 @@ body > :not(script):not(.watermark-layer){
  line-height:1.2;
 }
 
-.icon-adjust-panel{
- margin:0;
- padding:10px;
+.icon-folder + .icon-folder{
+ margin-top:10px;
+}
+
+.icon-folder{
  border:1px solid #e6eaf0;
- border-radius:12px;
- background:#fbfcfd;
+ border-radius:14px;
+ background:linear-gradient(180deg, #fbfcfd 0%, #f6f8fa 100%);
+ overflow:hidden;
 }
 
-.icon-adjust-heading{
- margin-bottom:8px;
- font-size:11px;
- font-weight:800;
- letter-spacing:0.03em;
- text-transform:uppercase;
- color:#68707d;
-}
-
-.icon-adjust-grid{
- display:grid;
- gap:8px;
-}
-
-.icon-adjust-control{
- display:grid;
- gap:5px;
-}
-
-.icon-adjust-control.is-disabled{
- opacity:0.45;
-}
-
-.icon-adjust-topline{
+.icon-folder-toggle{
+ width:100%;
  display:flex;
  align-items:center;
  justify-content:space-between;
- gap:8px;
- font-size:12px;
- font-weight:700;
- color:#1a1a1a;
-}
-
-.icon-adjust-value{
- font-size:11px;
+ gap:10px;
+ padding:12px 14px;
+ border:none;
+ background:transparent;
+ color:#111111;
+ text-align:left;
+ font-size:14px;
  font-weight:800;
- color:#6b7280;
-}
-
-.icon-adjust-actions{
- display:grid;
- gap:6px;
-}
-
-.icon-adjust-button-row{
- display:grid;
- grid-template-columns:repeat(2, minmax(0, 1fr));
- gap:6px;
-}
-
-.icon-direction-grid{
- display:grid;
- grid-template-columns:repeat(3, minmax(0, 1fr));
- gap:6px;
-}
-
-.icon-adjust-spacer{
- min-height:1px;
-}
-
-.icon-adjust-button,
-.icon-adjust-reset{
- width:100%;
- padding:7px 8px;
- border-radius:10px;
- border:1px solid transparent;
- color:#ffffff;
- font-size:12px;
- font-weight:700;
  cursor:pointer;
- box-shadow:0 6px 14px rgba(17,17,17,0.14);
- transition:filter .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 
-.icon-adjust-button{
- background:linear-gradient(180deg, #3182f6 0%, #1557d6 100%);
+.icon-folder-toggle::after{
+ content:"+";
+ font-size:18px;
+ font-weight:900;
+ color:#5d6672;
 }
 
-.icon-adjust-button[data-icon-step="scale-up"]{
- background:linear-gradient(180deg, #2bd67b 0%, #0f9f4f 100%);
+.icon-folder.is-open .icon-folder-toggle::after{
+ content:"-";
 }
 
-.icon-adjust-button[data-icon-step="scale-down"]{
- background:linear-gradient(180deg, #ff6b6b 0%, #d83b3b 100%);
+.icon-folder-meta{
+ font-size:11px;
+ font-weight:700;
+ color:#7b8490;
+ text-transform:uppercase;
+ letter-spacing:0.04em;
 }
 
-.icon-adjust-button[data-icon-step="center"]{
- background:linear-gradient(180deg, #717b8a 0%, #404a58 100%);
+.icon-folder-panel{
+ display:none;
+ padding:12px;
+ border-top:1px solid #edf0f4;
+ background:#ffffff;
 }
 
-.icon-adjust-button[data-icon-step="rotate-left"],
-.icon-adjust-button[data-icon-step="rotate-right"]{
- background:linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
-}
-
-.icon-adjust-reset{
- background:linear-gradient(180deg, #1f2937 0%, #000000 100%);
-}
-
-.icon-adjust-button:hover,
-.icon-adjust-reset:hover{
- filter:brightness(1.08);
-}
-
-.icon-adjust-button:active,
-.icon-adjust-reset:active{
- transform:translateY(1px);
-}
-
-.icon-adjust-button:disabled,
-.icon-adjust-reset:disabled{
- opacity:0.45;
- cursor:not-allowed;
- box-shadow:none;
- filter:none;
+.icon-folder.is-open .icon-folder-panel{
+ display:block;
 }
 
 .actions{
@@ -711,10 +756,6 @@ button.action{
   padding:0 7px 0 4px;
  }
 
- .icon-menu-header-layout{
-  grid-template-columns:1fr;
- }
-
  .color-menu-grid{
   grid-template-columns:1fr;
  }
@@ -741,11 +782,11 @@ button.action{
 <p class="search-kicker">Personalização</p>
 <label class="search-label" for="nameInput">Digite seu nome aqui</label>
 <input type="text" id="nameInput" placeholder="Digite seu nome aqui" oninput="updateAll()">
-<p class="search-helper">A prévia abaixo acompanha o tamanho do nome e mantém a composição ajustada dentro da garrafa.</p>
+<p class="search-helper">Digite seu nome, escolha um ícone e clique em compartilhar</p>
 </div>
 </div>
 
-<div class="section-title">🔥 14 Fontes Fixas</div>
+<div class="section-title section-title-primary">✨ Fontes Premium</div>
 <div class="list" id="fixedList"></div>
 
 <div class="top-actions bottom-actions">
@@ -828,24 +869,39 @@ const fontMap = new Map(allFonts.map(font=>[font.id,font]));
 const openTypeFontCache = new Map();
 const EXPORT_WIDTH = 1280;
 const EXPORT_HEIGHT = 720;
+const PREVIEW_WIDTH = 1400;
+const PREVIEW_HEIGHT = 180;
+const TEAM_CREST_PREVIEW_WIDTH = 980;
+const TEAM_CREST_PREVIEW_HEIGHT = 1540;
+const GLOBAL_VERTICAL_BOTTLE_MODE = false;
 const PREVIEW_PATH_WIDTH_RATIO = 0.88;
 const PREVIEW_PATH_HEIGHT_RATIO = 0.66;
 const EXPORT_PATH_WIDTH_RATIO = 0.36;
 const EXPORT_PATH_HEIGHT_RATIO = 0.20;
+const TEAM_CREST_TEXT_WIDTH_RATIO = 0.72;
+const TEAM_CREST_TEXT_HEIGHT_RATIO = 0.14;
 const ICON_SCALE_MIN = 0.7;
-const ICON_SCALE_MAX = 5;
-const ICON_OFFSET_X_MIN = -1.35;
-const ICON_OFFSET_X_MAX = 1.35;
-const ICON_OFFSET_Y_MIN = -1.15;
-const ICON_OFFSET_Y_MAX = 1.15;
-const ICON_TRAVEL_X_RATIO = 0.48;
-const ICON_TRAVEL_Y_RATIO = 0.46;
-const ICON_BASE_HEIGHT_RATIO = 0.17;
+const ICON_SCALE_MAX = 40;
+const ICON_OFFSET_X_MIN = -2.6;
+const ICON_OFFSET_X_MAX = 2.6;
+const ICON_OFFSET_Y_MIN = -2.2;
+const ICON_OFFSET_Y_MAX = 2.2;
+const ICON_TRAVEL_X_RATIO = 1.02;
+const ICON_TRAVEL_Y_RATIO = 0.96;
+const ICON_BASE_HEIGHT_RATIO = 0.24;
+const NORMAL_ICON_TEXT_HEIGHT_RATIO = 0.9;
+const NORMAL_ICON_GAP_RATIO = 0.08;
+const HORIZONTAL_BOTTLE_VIEWBOX = "-1000 4180 11150 3860";
+const VERTICAL_BOTTLE_VIEWBOX = "2645 535 3860 11150";
+const BOTTLE_ROTATE_CX = 4575;
+const BOTTLE_ROTATE_CY = 6110;
 const WATERMARK_TEXT = "Ultracell";
 const MODEL_STL_PATH = "model.stl";
 let textMeasureCanvas = null;
 let bottleGeometryPromise = null;
 const bottleModelCache = new Map();
+const pendingPreviewRenders = new WeakMap();
+let activeIconGesture = null;
 
 function clampByte(value){
  return Math.max(0, Math.min(255, Math.round(value)));
@@ -1061,6 +1117,8 @@ function createIcon(config){
   height:320,
   src:"",
   label:"Ícone",
+  categoryKey:"",
+  categoryTitle:"",
   ...config
  };
 
@@ -1085,7 +1143,9 @@ function normalizeManifestCategory(category, index){
    height:icon && icon.height,
    src:icon && icon.src,
    viewBox:icon && icon.viewBox,
-   markup:icon && icon.markup
+   markup:icon && icon.markup,
+   categoryKey:safeCategory.key || `categoria-${index + 1}`,
+   categoryTitle:safeCategory.title || `Categoria ${index + 1}`
   }))
  };
 }
@@ -1100,6 +1160,112 @@ const iconGroups = normalizedIconCategories.map(category=>({
  icons:category.icons.map(icon=>icon.key)
 }));
 const iconMap = new Map(iconCatalog.map(icon=>[icon.key, icon]));
+const iconRenderMetricsCache = new Map();
+let iconMeasureSurface = null;
+
+function parseViewBoxRect(viewBox = INLINE_ICON_VIEWBOX){
+ const parts = String(viewBox || INLINE_ICON_VIEWBOX)
+  .trim()
+  .split(/\s+/)
+  .map(value=>Number(value));
+
+ if(parts.length >= 4 && parts.every(Number.isFinite)){
+  return {
+   x:parts[0],
+   y:parts[1],
+   width:Math.max(parts[2], 1),
+   height:Math.max(parts[3], 1)
+  };
+ }
+
+ return {
+  x:0,
+  y:0,
+  width:1024,
+  height:1024
+ };
+}
+
+function ensureIconMeasureSurface(){
+ if(iconMeasureSurface && iconMeasureSurface.isConnected){
+  return iconMeasureSurface;
+ }
+
+ if(!document.body){
+  return null;
+ }
+
+ iconMeasureSurface = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+ iconMeasureSurface.setAttribute("aria-hidden", "true");
+ iconMeasureSurface.setAttribute("focusable", "false");
+ iconMeasureSurface.style.position = "absolute";
+ iconMeasureSurface.style.left = "-10000px";
+ iconMeasureSurface.style.top = "-10000px";
+ iconMeasureSurface.style.width = "1px";
+ iconMeasureSurface.style.height = "1px";
+ iconMeasureSurface.style.overflow = "visible";
+ iconMeasureSurface.style.visibility = "hidden";
+ iconMeasureSurface.style.pointerEvents = "none";
+ document.body.appendChild(iconMeasureSurface);
+ return iconMeasureSurface;
+}
+
+function getIconRenderMetrics(icon){
+ if(!icon){
+  return parseViewBoxRect();
+ }
+
+ const cacheKey = icon.key || `${icon.viewBox || INLINE_ICON_VIEWBOX}::${icon.markup || ""}`;
+ if(iconRenderMetricsCache.has(cacheKey)){
+  return iconRenderMetricsCache.get(cacheKey);
+ }
+
+ const fallbackRect = parseViewBoxRect(icon.viewBox || INLINE_ICON_VIEWBOX);
+ const fallbackMetrics = {
+  x:fallbackRect.x,
+  y:fallbackRect.y,
+  width:Math.max(Number(icon.width) || fallbackRect.width, 1),
+  height:Math.max(Number(icon.height) || fallbackRect.height, 1),
+  viewBox:`${fallbackRect.x} ${fallbackRect.y} ${Math.max(Number(icon.width) || fallbackRect.width, 1)} ${Math.max(Number(icon.height) || fallbackRect.height, 1)}`
+ };
+
+ const surface = ensureIconMeasureSurface();
+ if(!surface || !icon.markup){
+  iconRenderMetricsCache.set(cacheKey, fallbackMetrics);
+  return fallbackMetrics;
+ }
+
+ surface.setAttribute("viewBox", fallbackMetrics.viewBox);
+ surface.innerHTML = `<g data-icon-measure="true">${icon.markup}</g>`;
+
+ const group = surface.querySelector("[data-icon-measure='true']");
+ if(!group || typeof group.getBBox !== "function"){
+  iconRenderMetricsCache.set(cacheKey, fallbackMetrics);
+  return fallbackMetrics;
+ }
+
+ try{
+  const bounds = group.getBBox();
+  if(!Number.isFinite(bounds.width) || !Number.isFinite(bounds.height) || bounds.width <= 0 || bounds.height <= 0){
+   iconRenderMetricsCache.set(cacheKey, fallbackMetrics);
+   return fallbackMetrics;
+  }
+
+  const padding = Math.max(Math.max(bounds.width, bounds.height) * 0.04, 2);
+  const metrics = {
+   x:bounds.x - padding,
+   y:bounds.y - padding,
+   width:Math.max(bounds.width + (padding * 2), 1),
+   height:Math.max(bounds.height + (padding * 2), 1),
+   viewBox:`${bounds.x - padding} ${bounds.y - padding} ${Math.max(bounds.width + (padding * 2), 1)} ${Math.max(bounds.height + (padding * 2), 1)}`
+  };
+  iconRenderMetricsCache.set(cacheKey, metrics);
+  return metrics;
+ }catch(error){
+  iconRenderMetricsCache.set(cacheKey, fallbackMetrics);
+  return fallbackMetrics;
+ }
+}
 
 function mountLocalFontFaces(){
  return;
@@ -1410,14 +1576,50 @@ function renderBottleFrameInto(frameSlot, theme){
  frameSlot.innerHTML = buildBottleFrame(theme);
 }
 
+function isTeamCrestIcon(icon){
+ if(!icon){
+  return false;
+ }
+
+ const categoryKey = String(icon.categoryKey || "").toLowerCase();
+ const categoryTitle = String(icon.categoryTitle || "").toLowerCase();
+ const iconKey = String(icon.key || "").toLowerCase();
+ return categoryKey === "escudo-de-time" || categoryTitle.includes("escudo") || iconKey.startsWith("escudo-de-time-");
+}
+
+function getIconLayoutMode(icon){
+ if(GLOBAL_VERTICAL_BOTTLE_MODE){
+  return "team-crest";
+ }
+
+ return isTeamCrestIcon(icon) ? "team-crest" : "default";
+}
+
+function getPreviewCanvasSize(icon){
+ return GLOBAL_VERTICAL_BOTTLE_MODE || getIconLayoutMode(icon) === "team-crest"
+  ? { width:TEAM_CREST_PREVIEW_WIDTH, height:TEAM_CREST_PREVIEW_HEIGHT }
+  : { width:PREVIEW_WIDTH, height:PREVIEW_HEIGHT };
+}
+
+function getItemBottleVariant(itemOrIcon){
+ if(GLOBAL_VERTICAL_BOTTLE_MODE){
+  return "vertical";
+ }
+
+ const icon = itemOrIcon && itemOrIcon.kind
+  ? itemOrIcon
+  : getIconDefinition(itemOrIcon?.dataset?.iconKey || "");
+ return isTeamCrestIcon(icon) ? "vertical" : "horizontal";
+}
+
 function getPreviewFitConfig(text){
  const length = Math.max(1, String(text || "").trim().length);
 
  return {
-  widthRatio: Math.min(0.999, 0.978 + Math.max(0, length - 8) * 0.0018),
-  heightRatio: length <= 8 ? 1.05 : length <= 12 ? 1.01 : length <= 18 ? 0.97 : length <= 24 ? 0.94 : 0.91,
-  minSize:40,
-  maxSize:480
+  widthRatio: Math.min(0.998, 0.992 + Math.max(0, length - 8) * 0.0008),
+  heightRatio: length <= 8 ? 1.18 : length <= 12 ? 1.13 : length <= 18 ? 1.07 : length <= 24 ? 1.01 : 0.95,
+  minSize:44,
+  maxSize:560
  };
 }
 
@@ -1496,6 +1698,11 @@ function createItem(font){
   </div>
   <div class="bottle-preview">
    <div class="preview-svg" data-font-id="${font.id}"></div>
+   <div class="icon-resize-panel" aria-hidden="true">
+    <button class="icon-resize-button" type="button" aria-label="Diminuir ícone" onclick="stepBottleIconScale(this, -0.22)">−</button>
+    <span class="icon-resize-label">Redimensionar</span>
+    <button class="icon-resize-button" type="button" aria-label="Aumentar ícone" onclick="stepBottleIconScale(this, 0.22)">+</button>
+   </div>
   </div>
  <div class="bottle-shadow"></div>
  </div>
@@ -1612,98 +1819,48 @@ function getIconDefinition(key){
 }
 
 function buildIconPreviewMarkup(icon){
- return `<img src="${escapeXml(icon.src)}" alt="${escapeXml(icon.label)}" loading="lazy">`;
-}
-
-function buildIconAdjustControls(){
+ const metrics = getIconRenderMetrics(icon);
+ const previewMarkup = buildPaintedIconMarkup(icon, "currentColor");
  return `
-<div class="icon-adjust-panel">
- <div class="icon-adjust-heading">Ajuste do ícone</div>
- <div class="icon-adjust-grid">
-  <div class="icon-adjust-control" data-adjust-field="scale">
-   <span class="icon-adjust-topline">
-   <span>Aumentar ícone</span>
-   <span class="icon-adjust-value" data-icon-scale-value>100%</span>
-   </span>
-   <div class="icon-adjust-actions">
-    <div class="icon-adjust-button-row">
-     <button class="icon-adjust-button" type="button" data-icon-step="scale-down" onclick="stepBottleIconScale(this, -0.25)">-</button>
-     <button class="icon-adjust-button" type="button" data-icon-step="scale-up" onclick="stepBottleIconScale(this, 0.25)">+</button>
-    </div>
-   </div>
-  </div>
-  <div class="icon-adjust-control" data-adjust-field="move">
-   <span class="icon-adjust-topline">
-    <span>Mover ícone</span>
-    <span class="icon-adjust-value" data-icon-position-value>X 0% • Y 0%</span>
-   </span>
-   <div class="icon-adjust-actions">
-    <div class="icon-direction-grid">
-     <span class="icon-adjust-spacer" aria-hidden="true"></span>
-     <button class="icon-adjust-button" type="button" data-icon-step="up" onclick="stepBottleIconOffset(this, 'y', -0.14)">↑</button>
-     <span class="icon-adjust-spacer" aria-hidden="true"></span>
-     <button class="icon-adjust-button" type="button" data-icon-step="left" onclick="stepBottleIconOffset(this, 'x', -0.08)">←</button>
-     <button class="icon-adjust-button" type="button" data-icon-step="center" onclick="resetBottleIconPosition(this)">•</button>
-     <button class="icon-adjust-button" type="button" data-icon-step="right" onclick="stepBottleIconOffset(this, 'x', 0.08)">→</button>
-     <span class="icon-adjust-spacer" aria-hidden="true"></span>
-     <button class="icon-adjust-button" type="button" data-icon-step="down" onclick="stepBottleIconOffset(this, 'y', 0.14)">↓</button>
-     <span class="icon-adjust-spacer" aria-hidden="true"></span>
-    </div>
-   </div>
-  </div>
-  <div class="icon-adjust-control" data-adjust-field="rotation">
-   <span class="icon-adjust-topline">
-    <span>Rotacionar ícone</span>
-    <span class="icon-adjust-value" data-icon-rotation-value>0°</span>
-   </span>
-   <div class="icon-adjust-actions">
-    <div class="icon-adjust-button-row">
-     <button class="icon-adjust-button" type="button" data-icon-step="rotate-left" onclick="stepBottleIconRotation(this, -15)">↺</button>
-     <button class="icon-adjust-button" type="button" data-icon-step="rotate-right" onclick="stepBottleIconRotation(this, 15)">↻</button>
-    </div>
-   </div>
-  </div>
-  <button class="icon-adjust-reset" type="button" onclick="resetBottleIconAdjustments(this)">Voltar ao padrão</button>
- </div>
-</div>`.trim();
+<svg viewBox="${escapeXml(metrics.viewBox)}" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+ <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">${previewMarkup}</g>
+</svg>`.trim();
 }
 
 function buildIconMenu(){
  const clearOption = `
 <div class="icon-menu-header">
- <div class="icon-menu-header-layout">
-  <div class="icon-clear-column">
-   <div class="icon-menu-grid">
-    <button class="icon-option" type="button" data-icon-key="" aria-pressed="true" onclick="selectBottleIcon(this, '')">
-     <span class="icon-option-art icon-option-art-empty">+</span>
-     <span class="icon-option-label">Sem ícone</span>
-    </button>
-   </div>
+  <div class="icon-menu-grid">
+   <button class="icon-option" type="button" data-icon-key="" aria-pressed="true" onclick="selectBottleIcon(this, '')">
+    <span class="icon-option-art icon-option-art-empty">+</span>
+    <span class="icon-option-label">Sem ícone</span>
+   </button>
   </div>
-  <div class="icon-adjust-column">
-   ${buildIconAdjustControls()}
-  </div>
- </div>
 </div>`.trim();
 
  const groupsMarkup = iconGroups.map(group=>`
-<div class="color-menu-group">
- <div class="color-menu-title">${group.title}</div>
- <div class="icon-menu-grid">
-  ${group.icons.map(iconKey=>{
-   const icon = getIconDefinition(iconKey);
-   return `
-  <button
-   class="icon-option"
-   type="button"
-   data-icon-key="${icon.key}"
-   aria-pressed="false"
-   onclick="selectBottleIcon(this, '${icon.key}')"
-  >
-   <span class="icon-option-art">${buildIconPreviewMarkup(icon)}</span>
-   <span class="icon-option-label">${icon.label}</span>
-  </button>`.trim();
-  }).join("")}
+<div class="icon-folder">
+ <button class="icon-folder-toggle" type="button" aria-expanded="false" onclick="toggleIconFolder(this)">
+  <span>${group.title}</span>
+  <span class="icon-folder-meta">${group.icons.length} itens</span>
+ </button>
+ <div class="icon-folder-panel">
+  <div class="icon-menu-grid">
+   ${group.icons.map(iconKey=>{
+    const icon = getIconDefinition(iconKey);
+    return `
+   <button
+    class="icon-option"
+    type="button"
+    data-icon-key="${icon.key}"
+    aria-pressed="false"
+    onclick="selectBottleIcon(this, '${icon.key}')"
+   >
+    <span class="icon-option-art">${buildIconPreviewMarkup(icon)}</span>
+    <span class="icon-option-label">${icon.label}</span>
+   </button>`.trim();
+   }).join("")}
+  </div>
  </div>
 </div>`.trim()).join("");
 
@@ -1724,7 +1881,7 @@ function buildBottleFrame(theme = "preto"){
  const whiteStrokeOpacity = palette.light ? "0.72" : "0.94";
 
  return `
-<svg class="bottle-frame" viewBox="-1000 4180 11150 3860" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+<svg class="bottle-frame" viewBox="${HORIZONTAL_BOTTLE_VIEWBOX}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
  <defs>
   <linearGradient id="steel-fill-${matteId}" x1="0%" y1="0%" x2="100%" y2="0%">
    <stop offset="0%" stop-color="#5f666d"/>
@@ -1791,6 +1948,35 @@ function buildBottleFrame(theme = "preto"){
 </svg>`.trim();
 }
 
+function buildVerticalBottleFrame(theme = "preto"){
+ return buildBottleFrame(theme)
+  .replace(`class="bottle-frame" viewBox="${HORIZONTAL_BOTTLE_VIEWBOX}"`, `class="bottle-frame bottle-frame-vertical" viewBox="${VERTICAL_BOTTLE_VIEWBOX}"`)
+  .replace('aria-hidden="true">', `aria-hidden="true"><g transform="rotate(90 ${BOTTLE_ROTATE_CX} ${BOTTLE_ROTATE_CY})">`)
+  .replace(/<\/svg>\s*$/, "</g></svg>");
+}
+
+function syncBottlePresentation(item, icon = null){
+ if(!item){
+  return;
+ }
+
+ const resolvedIcon = icon || getIconDefinition(item.dataset.iconKey || "");
+ const variant = getItemBottleVariant(resolvedIcon);
+ const frameSlot = item.querySelector(".bottle-frame-slot");
+
+ item.classList.toggle("team-crest-mode", variant === "vertical");
+ item.dataset.bottleVariant = variant;
+
+ if(frameSlot){
+  const theme = item.dataset.bottleTheme || "preto";
+  frameSlot.dataset.themeKey = theme;
+  frameSlot.dataset.variant = variant;
+  frameSlot.innerHTML = variant === "vertical"
+   ? buildVerticalBottleFrame(theme)
+   : buildBottleFrame(theme);
+ }
+}
+
 function syncBottleTheme(item){
  if(!item){
   return;
@@ -1798,12 +1984,9 @@ function syncBottleTheme(item){
 
  const theme = item.dataset.bottleTheme || "preto";
  const palette = getBottleTheme(theme);
- const frameSlot = item.querySelector(".bottle-frame-slot");
  const colorDot = item.querySelector(".color-dot");
 
- if(frameSlot){
-  renderBottleFrameInto(frameSlot, theme);
- }
+ syncBottlePresentation(item);
 
  if(colorDot){
   colorDot.style.background = palette.dot;
@@ -1828,9 +2011,10 @@ function syncBottleIcon(item){
  }
 
  const icon = getIconDefinition(item.dataset.iconKey || "");
- const adjustments = getItemIconAdjustments(item);
- const toggle = item.querySelector(".icon-toggle");
+  const toggle = item.querySelector(".icon-toggle");
  const hasIcon = !!icon;
+
+ syncBottlePresentation(item, icon);
 
  if(toggle){
   toggle.textContent = icon ? `Ícone: ${icon.label}` : "Adicionar ícone";
@@ -1843,33 +2027,54 @@ function syncBottleIcon(item){
   option.setAttribute("aria-pressed", selected ? "true" : "false");
  });
 
- const scaleValue = item.querySelector("[data-icon-scale-value]");
- const positionValue = item.querySelector("[data-icon-position-value]");
- const rotationValue = item.querySelector("[data-icon-rotation-value]");
- const resetButton = item.querySelector(".icon-adjust-reset");
-
- if(scaleValue){
-  scaleValue.textContent = `${Math.round(adjustments.scale * 100)}%`;
- }
-
- if(positionValue){
-  positionValue.textContent = `X ${formatSignedPercent(adjustments.offsetX * 100)} • Y ${formatSignedPercent(adjustments.offsetY * 100)}`;
- }
-
- if(rotationValue){
-  rotationValue.textContent = `${Math.round(adjustments.rotation)}°`;
- }
-
- if(resetButton){
-  resetButton.disabled = !hasIcon;
- }
-
- item.querySelectorAll(".icon-adjust-button").forEach(button=>{
-  button.disabled = !hasIcon;
+ item.querySelectorAll(".icon-folder").forEach(folder=>{
+  const containsSelected = !!folder.querySelector(`.icon-option[data-icon-key="${item.dataset.iconKey || ""}"].is-selected`);
+  folder.classList.toggle("is-open", hasIcon && containsSelected);
+  const folderToggle = folder.querySelector(".icon-folder-toggle");
+  if(folderToggle){
+   folderToggle.setAttribute("aria-expanded", hasIcon && containsSelected ? "true" : "false");
+  }
  });
 
- item.querySelectorAll(".icon-adjust-control").forEach(control=>{
-  control.classList.toggle("is-disabled", !hasIcon);
+ item.classList.toggle("icon-resize-open", hasIcon && item.classList.contains("icon-resize-open"));
+
+ const resizePanel = item.querySelector(".icon-resize-panel");
+ if(resizePanel){
+  resizePanel.setAttribute("aria-hidden", hasIcon && item.classList.contains("icon-resize-open") ? "false" : "true");
+ }
+}
+
+function openIconResizePanel(item){
+ if(!item || !(item.dataset.iconKey || "")){
+  return;
+ }
+
+ document.querySelectorAll(".item.icon-resize-open").forEach(currentItem=>{
+  if(currentItem !== item){
+   currentItem.classList.remove("icon-resize-open");
+   const currentPanel = currentItem.querySelector(".icon-resize-panel");
+   if(currentPanel){
+    currentPanel.setAttribute("aria-hidden", "true");
+   }
+  }
+ });
+
+ item.classList.add("icon-resize-open");
+ const resizePanel = item.querySelector(".icon-resize-panel");
+ if(resizePanel){
+  resizePanel.setAttribute("aria-hidden", "false");
+ }
+}
+
+function closeIconResizePanels(exceptItem = null){
+ document.querySelectorAll(".item.icon-resize-open").forEach(item=>{
+  if(item !== exceptItem){
+   item.classList.remove("icon-resize-open");
+   const resizePanel = item.querySelector(".icon-resize-panel");
+   if(resizePanel){
+    resizePanel.setAttribute("aria-hidden", "true");
+   }
+  }
  });
 }
 
@@ -1940,6 +2145,25 @@ function toggleIconMenu(control){
  control.setAttribute("aria-expanded", isOpen ? "false" : "true");
 }
 
+function toggleIconFolder(control){
+ const folder = control.closest(".icon-folder");
+ const menu = control.closest(".icon-menu-panel");
+ if(!folder || !menu){
+  return;
+ }
+
+ const willOpen = !folder.classList.contains("is-open");
+
+ menu.querySelectorAll(".icon-folder").forEach(currentFolder=>{
+  const isCurrent = currentFolder === folder;
+  currentFolder.classList.toggle("is-open", isCurrent && willOpen);
+  const currentToggle = currentFolder.querySelector(".icon-folder-toggle");
+  if(currentToggle){
+   currentToggle.setAttribute("aria-expanded", isCurrent && willOpen ? "true" : "false");
+  }
+ });
+}
+
 async function selectBottleColor(control, theme){
  const item = control.closest(".item");
  if(!item){
@@ -1977,13 +2201,19 @@ async function selectBottleIcon(control, iconKey){
  syncBottleIcon(item);
 
   const preview = item.querySelector(".preview-svg");
-  if(preview){
+ if(preview){
   await drawPreviewSvg(preview);
  }
 
  const toggle = item.querySelector(".icon-toggle");
  if(toggle){
   toggle.setAttribute("aria-expanded", "true");
+ }
+
+ if(iconKey){
+  openIconResizePanel(item);
+ }else{
+  closeIconResizePanels(item);
  }
 
  item.classList.add("icon-menu-open");
@@ -1994,6 +2224,143 @@ async function redrawItemPreview(item){
  if(preview){
   await drawPreviewSvg(preview);
  }
+}
+
+function schedulePreviewRedraw(item){
+ if(!item || pendingPreviewRenders.has(item)){
+  return;
+ }
+
+ const frameId = requestAnimationFrame(async ()=>{
+  pendingPreviewRenders.delete(item);
+  await redrawItemPreview(item);
+ });
+
+ pendingPreviewRenders.set(item, frameId);
+}
+
+function getPointerClientPoint(event){
+ return {
+  x:parseFiniteNumber(event?.clientX, 0),
+  y:parseFiniteNumber(event?.clientY, 0)
+ };
+}
+
+function getGesturePoints(gesture){
+ return Array.from(gesture?.pointers?.values() || []);
+}
+
+function getGestureCenter(points){
+ if(!points.length){
+  return { x:0, y:0 };
+ }
+
+ const total = points.reduce((accumulator, point)=>({
+  x:accumulator.x + point.x,
+  y:accumulator.y + point.y
+ }), { x:0, y:0 });
+
+ return {
+  x:total.x / points.length,
+  y:total.y / points.length
+ };
+}
+
+function getGestureDistance(points){
+ if(points.length < 2){
+  return 0;
+ }
+
+ const [pointA, pointB] = points;
+ return Math.hypot(pointB.x - pointA.x, pointB.y - pointA.y);
+}
+
+function setActiveIconGestureBaseline(gesture){
+ if(!gesture){
+  return;
+ }
+
+ gesture.startAdjustments = getItemIconAdjustments(gesture.item);
+ const points = getGesturePoints(gesture);
+ gesture.startCenter = getGestureCenter(points);
+ gesture.startDistance = Math.max(getGestureDistance(points), 1);
+}
+
+function beginActiveIconGesture(event){
+ const target = event.target && event.target.closest
+  ? event.target.closest("[data-preview-icon-hit]")
+  : null;
+ const item = target ? target.closest(".item") : null;
+ const preview = target ? target.closest(".preview-svg") : null;
+
+ if(!target || !item || !preview || !(item.dataset.iconKey || "")){
+  return;
+ }
+
+ event.preventDefault();
+ event.stopPropagation();
+ openIconResizePanel(item);
+
+ if(!activeIconGesture || activeIconGesture.item !== item){
+  activeIconGesture = {
+   item,
+   preview,
+   pointers:new Map(),
+   startAdjustments:getItemIconAdjustments(item),
+   startCenter:{ x:0, y:0 },
+   startDistance:1
+  };
+ }
+
+ activeIconGesture.pointers.set(event.pointerId, getPointerClientPoint(event));
+ setActiveIconGestureBaseline(activeIconGesture);
+}
+
+function moveActiveIconGesture(event){
+ if(!activeIconGesture || !activeIconGesture.pointers.has(event.pointerId)){
+  return;
+ }
+
+ event.preventDefault();
+ activeIconGesture.pointers.set(event.pointerId, getPointerClientPoint(event));
+
+ const gesture = activeIconGesture;
+ const points = getGesturePoints(gesture);
+ if(!points.length){
+  return;
+ }
+
+ const previewRect = gesture.preview.getBoundingClientRect();
+ const currentCenter = getGestureCenter(points);
+ const deltaX = currentCenter.x - gesture.startCenter.x;
+ const deltaY = currentCenter.y - gesture.startCenter.y;
+ const nextAdjustments = {
+  offsetX:gesture.startAdjustments.offsetX + (deltaX / Math.max(previewRect.width * ICON_TRAVEL_X_RATIO, 1)),
+  offsetY:gesture.startAdjustments.offsetY + (deltaY / Math.max(previewRect.height * ICON_TRAVEL_Y_RATIO, 1))
+ };
+
+ if(points.length >= 2){
+  nextAdjustments.scale = gesture.startAdjustments.scale * (getGestureDistance(points) / Math.max(gesture.startDistance, 1));
+ }
+
+ setItemIconAdjustments(gesture.item, nextAdjustments);
+ syncBottleIcon(gesture.item);
+ schedulePreviewRedraw(gesture.item);
+}
+
+function endActiveIconGesture(event){
+ if(!activeIconGesture || !activeIconGesture.pointers.has(event.pointerId)){
+  return;
+ }
+
+ activeIconGesture.pointers.delete(event.pointerId);
+
+ if(!activeIconGesture.pointers.size){
+  activeIconGesture = null;
+  return;
+ }
+
+ setActiveIconGestureBaseline(activeIconGesture);
 }
 
 async function stepBottleIconScale(control, delta){
@@ -2118,11 +2485,12 @@ function getIconLayoutMetrics(icon, referenceHeight, iconOptions = {}){
   };
  }
 
+ const metrics = getIconRenderMetrics(icon);
  const scale = clamp(parseFiniteNumber(iconOptions.scale, 1), ICON_SCALE_MIN, ICON_SCALE_MAX);
  const offsetX = referenceHeight * clamp(parseFiniteNumber(iconOptions.offsetX, 0), -0.9, 0.9);
  const offsetY = referenceHeight * clamp(parseFiniteNumber(iconOptions.offsetY, 0), -0.65, 0.65);
  const iconHeight = Math.max(referenceHeight * 0.88 * scale, 18 * scale);
- const iconWidth = iconHeight * (icon.width / icon.height);
+ const iconWidth = iconHeight * (metrics.width / metrics.height);
  const gap = Math.max(referenceHeight * 0.016, 3);
 
  return {
@@ -2341,22 +2709,27 @@ function getStandaloneIconPlacement(icon, width, height, textBounds = null, icon
   };
  }
 
+ const metrics = getIconRenderMetrics(icon);
  const scale = clamp(parseFiniteNumber(iconOptions.scale, 1), ICON_SCALE_MIN, ICON_SCALE_MAX);
  const normalizedX = clamp(parseFiniteNumber(iconOptions.offsetX, 0), ICON_OFFSET_X_MIN, ICON_OFFSET_X_MAX);
  const normalizedY = clamp(parseFiniteNumber(iconOptions.offsetY, 0), ICON_OFFSET_Y_MIN, ICON_OFFSET_Y_MAX);
- const baseIconHeight = Math.max(height * ICON_BASE_HEIGHT_RATIO, 24);
- const iconHeight = baseIconHeight * scale;
- const iconWidth = iconHeight * (icon.width / icon.height);
+ const iconAspectRatio = metrics.width / metrics.height;
+ const textHeight = textBounds ? Math.max(textBounds.height, height * 0.28) : (height * 0.42);
+ const baseIconHeight = Math.max(textHeight * NORMAL_ICON_TEXT_HEIGHT_RATIO, height * (ICON_BASE_HEIGHT_RATIO * 0.72), 20);
+ const paddingX = Math.max(width * 0.012, 4);
+ const paddingY = Math.max(height * 0.045, 4);
+ const maxIconHeightByWidth = Math.max(((width - (paddingX * 2)) / Math.max(iconAspectRatio, 0.0001)), 24);
+ const maxIconHeight = Math.max(Math.min(height - (paddingY * 2), maxIconHeightByWidth), 24);
+ const iconHeight = Math.min(baseIconHeight * scale, maxIconHeight);
+ const iconWidth = iconHeight * iconAspectRatio;
  const textCenterY = textBounds ? ((textBounds.y1 + textBounds.y2) / 2) : (height / 2);
- const gap = Math.max(width * 0.014, 8);
+ const gap = Math.max(textHeight * NORMAL_ICON_GAP_RATIO, 8);
  const baseLeft = textBounds
   ? textBounds.x2 + gap
   : ((width * 0.72) - (iconWidth / 2));
  const baseTop = textCenterY - (iconHeight / 2);
  const travelX = width * ICON_TRAVEL_X_RATIO * normalizedX;
  const travelY = height * ICON_TRAVEL_Y_RATIO * normalizedY;
- const paddingX = Math.max(width * 0.015, 6);
- const paddingY = Math.max(height * 0.04, 4);
  const maxLeft = Math.max(paddingX, width - paddingX - iconWidth);
  const maxTop = Math.max(paddingY, height - paddingY - iconHeight);
 
@@ -2365,6 +2738,39 @@ function getStandaloneIconPlacement(icon, width, height, textBounds = null, icon
   y:clamp(baseTop + travelY, paddingY, maxTop),
   width:iconWidth,
   height:iconHeight
+ };
+}
+
+function getTeamCrestStackLayout(width, height, textMetrics, icon, iconOptions = {}){
+ const metrics = getIconRenderMetrics(icon);
+ const scale = clamp(parseFiniteNumber(iconOptions.scale, 1), ICON_SCALE_MIN, ICON_SCALE_MAX);
+ const normalizedX = clamp(parseFiniteNumber(iconOptions.offsetX, 0), ICON_OFFSET_X_MIN, ICON_OFFSET_X_MAX);
+ const normalizedY = clamp(parseFiniteNumber(iconOptions.offsetY, 0), ICON_OFFSET_Y_MIN, ICON_OFFSET_Y_MAX);
+ const iconAspectRatio = metrics.width / metrics.height;
+ const textWidth = Math.max(textMetrics && textMetrics.width ? textMetrics.width : 0, 1);
+ const textHeight = Math.max(textMetrics && textMetrics.height ? textMetrics.height : 0, 1);
+ const maxWidth = width * 0.78;
+ const maxIconHeightByWidth = maxWidth / Math.max(iconAspectRatio, 0.0001);
+ const baseIconHeight = Math.min(height * 0.5, maxIconHeightByWidth);
+ const iconHeight = Math.min(baseIconHeight * Math.max(scale, 1), height * 0.66, maxIconHeightByWidth * 1.2);
+ const iconWidth = iconHeight * iconAspectRatio;
+ const gap = Math.max(height * 0.038, 18);
+ const groupWidth = Math.max(textWidth, iconWidth);
+ const groupHeight = iconHeight + gap + textHeight;
+ const marginX = width * 0.08;
+ const marginY = height * 0.08;
+ const travelX = width * 0.1 * normalizedX;
+ const travelY = height * 0.08 * normalizedY;
+ const groupLeft = clamp(((width - groupWidth) / 2) + travelX, marginX, width - marginX - groupWidth);
+ const groupTop = clamp(((height - groupHeight) / 2) + travelY, marginY, height - marginY - groupHeight);
+
+ return {
+  iconX:groupLeft + ((groupWidth - iconWidth) / 2),
+  iconY:groupTop,
+  iconWidth,
+  iconHeight,
+  textCenterX:groupLeft + (groupWidth / 2),
+  textCenterY:groupTop + iconHeight + gap + (textHeight / 2)
  };
 }
 
@@ -2491,10 +2897,44 @@ function resolveSvgFill(fill){
  return { fill, defs:"", extraAttrs:"" };
 }
 
+function buildPaintedIconMarkup(icon, paint){
+ if(!icon || !icon.markup){
+  return "";
+ }
+
+ const normalizePaint = (value)=>String(value || "").trim().toLowerCase();
+ const shouldPreservePaint = value=>{
+  const normalized = normalizePaint(value);
+  return !normalized || normalized === "none" || normalized === "transparent";
+ };
+ const repaintStyleAttribute = styleValue=>String(styleValue || "")
+  .replace(/(^|;)\s*fill\s*:\s*([^;"]+)/gi, (match, prefix, value)=>(
+   shouldPreservePaint(value) ? `${prefix}fill:${value.trim()}` : `${prefix}fill:${paint}`
+  ))
+  .replace(/(^|;)\s*stroke\s*:\s*([^;"]+)/gi, (match, prefix, value)=>(
+   shouldPreservePaint(value) ? `${prefix}stroke:${value.trim()}` : `${prefix}stroke:${paint}`
+  ));
+
+ return icon.markup
+  .replace(/<metadata\b[^>]*\/>/gi, "")
+  .replace(/<metadata\b[\s\S]*?<\/metadata>/gi, "")
+  .replace(/<title\b[\s\S]*?<\/title>/gi, "")
+  .replace(/<desc\b[\s\S]*?<\/desc>/gi, "")
+  .replace(/\sfill="([^"]*)"/gi, (match, value)=>(
+   shouldPreservePaint(value) ? ` fill="${value}"` : ` fill="${paint}"`
+  ))
+  .replace(/\sstroke="([^"]*)"/gi, (match, value)=>(
+   shouldPreservePaint(value) ? ` stroke="${value}"` : ` stroke="${paint}"`
+  ))
+  .replace(/style="([^"]*)"/gi, (match, styleValue)=>`style="${repaintStyleAttribute(styleValue)}"`)
+  .replace(/currentColor/gi, paint);
+}
+
 async function buildSvgMarkup(font, text, width = 1600, height = 260, fill = "metallic-silver", iconKey = "", iconOptions = {}){
  const fillConfig = resolveSvgFill(fill);
  const previewFit = getPreviewFitConfig(text);
  const icon = getIconDefinition(iconKey);
+ const layoutMode = getIconLayoutMode(icon);
 
  if(font.isLocal){
   const fontObject = await getOpenTypeFont(font);
@@ -2506,14 +2946,35 @@ async function buildSvgMarkup(font, text, width = 1600, height = 260, fill = "me
     height,
     true,
     previewFit.widthRatio,
-    previewFit.heightRatio,
-    fill,
-    "",
-    previewFit,
-    icon,
-    iconOptions
+   previewFit.heightRatio,
+   fill,
+   "",
+   previewFit,
+   icon,
+   iconOptions,
+   { interactive:true },
+   layoutMode
    );
   }
+ }
+
+ if(layoutMode === "team-crest" && icon){
+  const fontSize = fitSvgTextSize(
+   text,
+   font.cssFamily,
+   width * TEAM_CREST_TEXT_WIDTH_RATIO,
+   height * TEAM_CREST_TEXT_HEIGHT_RATIO,
+   previewFit
+  );
+  const textBounds = measureSvgTextBounds(text, font.cssFamily, fontSize, width, height);
+  const stackLayout = getTeamCrestStackLayout(width, height, textBounds, icon, iconOptions);
+
+  return `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block">
+ ${fillConfig.defs}
+ ${buildPositionedIconMarkup(icon, stackLayout.iconX, stackLayout.iconY, stackLayout.iconHeight, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation, { interactive:true })}
+ <text x="${stackLayout.textCenterX}" y="${stackLayout.textCenterY}" text-anchor="middle" dominant-baseline="middle" font-family="${escapeXml(font.cssFamily)}" font-size="${fontSize}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}>${escapeXml(text)}</text>
+</svg>`.trim();
  }
 
  const fontSize = fitSvgTextSize(
@@ -2530,46 +2991,74 @@ async function buildSvgMarkup(font, text, width = 1600, height = 260, fill = "me
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block">
  ${fillConfig.defs}
  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="${escapeXml(font.cssFamily)}" font-size="${fontSize}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}>${escapeXml(text)}</text>
- ${buildPositionedIconMarkup(icon, iconPlacement.x, iconPlacement.y, iconPlacement.height, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation)}
+ ${buildPositionedIconMarkup(icon, iconPlacement.x, iconPlacement.y, iconPlacement.height, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation, { interactive:true })}
 </svg>`.trim();
 }
 
-function buildPositionedIconMarkup(icon, x, y, iconHeight, paint, extraAttrs = "", rotation = 0){
+function buildPreviewIconHitMarkup(x, y, width, height){
+ if(!width || !height){
+  return "";
+ }
+
+ const radius = Math.max(Math.min(height * 0.16, 18), 6);
+ const hitPaddingX = Math.max(width * 0.12, 12);
+ const hitPaddingY = Math.max(height * 0.18, 12);
+ return `
+<rect
+ class="preview-icon-hit"
+ x="${x - hitPaddingX}"
+ y="${y - hitPaddingY}"
+ width="${width + (hitPaddingX * 2)}"
+ height="${height + (hitPaddingY * 2)}"
+ rx="${radius}"
+ ry="${radius}"
+ fill="#000000"
+ fill-opacity="0.001"
+ stroke="none"
+ pointer-events="all"
+ data-preview-icon-hit="true"
+/>`.trim();
+}
+
+function buildPositionedIconMarkup(icon, x, y, iconHeight, paint, extraAttrs = "", rotation = 0, renderOptions = {}){
  if(!icon || !iconHeight){
   return "";
  }
 
- const iconWidth = iconHeight * (icon.width / icon.height);
- const viewBoxParts = String(icon.viewBox || INLINE_ICON_VIEWBOX).split(/\s+/).map(Number);
- const viewBoxWidth = viewBoxParts[2] || 1;
- const viewBoxHeight = viewBoxParts[3] || 1;
-
- if(icon.kind === "svg" && icon.markup){
-  const scale = Math.min(iconWidth / viewBoxWidth, iconHeight / viewBoxHeight);
-  const scaledWidth = viewBoxWidth * scale;
-  const scaledHeight = viewBoxHeight * scale;
-  const offsetX = x + ((iconWidth - scaledWidth) / 2);
-  const offsetY = y + ((iconHeight - scaledHeight) / 2);
-  const normalizedRotation = parseFiniteNumber(rotation, 0);
-  const localCenterX = scaledWidth / 2;
-  const localCenterY = scaledHeight / 2;
-  const rotationOpen = normalizedRotation
-   ? `<g transform="rotate(${normalizedRotation} ${localCenterX} ${localCenterY})">`
-   : "";
-  const rotationClose = normalizedRotation ? `</g>` : "";
-
-  return `
-<g transform="translate(${offsetX} ${offsetY})" fill="${paint}" fill-rule="evenodd" clip-rule="evenodd" ${extraAttrs}>${rotationOpen}<g transform="scale(${scale})">${icon.markup}</g>${rotationClose}</g>`.trim();
+ const metrics = getIconRenderMetrics(icon);
+ const interactive = Boolean(renderOptions && renderOptions.interactive);
+ const iconWidth = iconHeight * (metrics.width / metrics.height);
+ if(icon.kind !== "svg" || !icon.markup){
+  return "";
  }
+ const paintedMarkup = buildPaintedIconMarkup(icon, paint);
+ const scaleX = iconWidth / Math.max(metrics.width, 0.0001);
+ const scaleY = iconHeight / Math.max(metrics.height, 0.0001);
+ const translateX = x - (metrics.x * scaleX);
+ const translateY = y - (metrics.y * scaleY);
 
- return "";
+ const normalizedRotation = parseFiniteNumber(rotation, 0);
+ const centerX = x + (iconWidth / 2);
+ const centerY = y + (iconHeight / 2);
+ const rotationAttrs = normalizedRotation
+  ? ` transform="rotate(${normalizedRotation} ${centerX} ${centerY})"`
+  : "";
+
+ return `
+<g${rotationAttrs}>
+ <g transform="translate(${translateX} ${translateY}) scale(${scaleX} ${scaleY})">
+  <g fill="${paint}" fill-rule="evenodd" clip-rule="evenodd" ${extraAttrs}>${paintedMarkup}</g>
+ </g>
+</g>
+${interactive ? buildPreviewIconHitMarkup(x, y, iconWidth, iconHeight) : ""}`.trim();
 }
 
-async function buildOutlinedSvgMarkup(fontObject, text, width, height, responsive = false, widthRatio = PREVIEW_PATH_WIDTH_RATIO, heightRatio = PREVIEW_PATH_HEIGHT_RATIO, fill = "#000000", defs = "", options = {}, icon = null, iconOptions = {}){
+async function buildOutlinedSvgMarkup(fontObject, text, width, height, responsive = false, widthRatio = PREVIEW_PATH_WIDTH_RATIO, heightRatio = PREVIEW_PATH_HEIGHT_RATIO, fill = "#000000", defs = "", options = {}, icon = null, iconOptions = {}, renderOptions = {}, layoutMode = "default"){
  const fillConfig = resolveSvgFill(fill);
- const sizeAttrs = responsive
+  const sizeAttrs = responsive
   ? `preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block"`
   : `width="${width}" height="${height}" preserveAspectRatio="xMidYMid meet"`;
+ const resolvedLayoutMode = layoutMode || getIconLayoutMode(icon);
 
  if(!icon){
   const path = buildOpenTypePath(fontObject, text, width, height, widthRatio, heightRatio, options);
@@ -2578,6 +3067,30 @@ async function buildOutlinedSvgMarkup(fontObject, text, width, height, responsiv
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" ${sizeAttrs}>
  ${defs || fillConfig.defs}
  <path d="${svgPath}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}/>
+</svg>`.trim();
+ }
+
+ if(resolvedLayoutMode === "team-crest"){
+  const fit = fitOpenTypeSize(fontObject, text, width * TEAM_CREST_TEXT_WIDTH_RATIO, height * TEAM_CREST_TEXT_HEIGHT_RATIO, options);
+  const textMetrics = {
+   width:fit.box.x2 - fit.box.x1,
+   height:fit.box.y2 - fit.box.y1
+  };
+  const stackLayout = getTeamCrestStackLayout(width, height, textMetrics, icon, iconOptions);
+  const textX = stackLayout.textCenterX - ((fit.box.x1 + fit.box.x2) / 2);
+  const textY = stackLayout.textCenterY - ((fit.box.y1 + fit.box.y2) / 2);
+  const textPath = fontObject.getPath(text, textX, textY, fit.size, { kerning:true });
+  const iconPlacement = {
+   x:stackLayout.iconX,
+   y:stackLayout.iconY,
+   height:stackLayout.iconHeight
+  };
+
+  return `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" ${sizeAttrs}>
+ ${defs || fillConfig.defs}
+ ${buildPositionedIconMarkup(icon, iconPlacement.x, iconPlacement.y, iconPlacement.height, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation, renderOptions)}
+ <path d="${pathToSvgData(textPath)}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}/>
 </svg>`.trim();
  }
 
@@ -2592,7 +3105,7 @@ async function buildOutlinedSvgMarkup(fontObject, text, width, height, responsiv
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" ${sizeAttrs}>
  ${defs || fillConfig.defs}
  <path d="${pathToSvgData(textPath)}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}/>
- ${buildPositionedIconMarkup(icon, iconPlacement.x, iconPlacement.y, iconPlacement.height, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation)}
+ ${buildPositionedIconMarkup(icon, iconPlacement.x, iconPlacement.y, iconPlacement.height, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation, renderOptions)}
 </svg>`.trim();
 }
 
@@ -2607,7 +3120,8 @@ async function buildOutlinedExportSvg(font, text, width = EXPORT_WIDTH, height =
  }
 
  const icon = getIconDefinition(iconKey);
- return await buildOutlinedSvgMarkup(fontObject, text, width, height, false, EXPORT_PATH_WIDTH_RATIO, EXPORT_PATH_HEIGHT_RATIO, "#000000", "", {}, icon, iconOptions);
+ const layoutMode = getIconLayoutMode(icon);
+ return await buildOutlinedSvgMarkup(fontObject, text, width, height, false, EXPORT_PATH_WIDTH_RATIO, EXPORT_PATH_HEIGHT_RATIO, "#000000", "", {}, icon, iconOptions, {}, layoutMode);
 }
 
 async function buildOutlinedExportPdf(font, text, width = EXPORT_WIDTH, height = EXPORT_HEIGHT, iconKey = "", iconOptions = {}){
@@ -2621,7 +3135,8 @@ async function buildOutlinedExportPdf(font, text, width = EXPORT_WIDTH, height =
  }
 
  const icon = getIconDefinition(iconKey);
- const svgMarkup = await buildOutlinedSvgMarkup(fontObject, text, width, height, false, EXPORT_PATH_WIDTH_RATIO, EXPORT_PATH_HEIGHT_RATIO, "#000000", "", {}, icon, iconOptions);
+ const layoutMode = getIconLayoutMode(icon);
+ const svgMarkup = await buildOutlinedSvgMarkup(fontObject, text, width, height, false, EXPORT_PATH_WIDTH_RATIO, EXPORT_PATH_HEIGHT_RATIO, "#000000", "", {}, icon, iconOptions, {}, layoutMode);
  const parser = new DOMParser();
  const svgDoc = parser.parseFromString(svgMarkup, "image/svg+xml");
  const svgElement = svgDoc.documentElement;
@@ -2658,14 +3173,16 @@ async function drawPreviewSvg(container){
  const item = container.closest(".item");
  const theme = item ? (item.dataset.bottleTheme || "preto") : "preto";
  const iconKey = item ? (item.dataset.iconKey || "") : "";
- const iconOptions = item ? getItemIconAdjustments(item) : getDefaultIconAdjustments();
+ const icon = getIconDefinition(iconKey);
+  const iconOptions = item ? getItemIconAdjustments(item) : getDefaultIconAdjustments();
  const previewFill = getBottleTheme(theme).previewFill;
+ const previewCanvas = getPreviewCanvasSize(icon);
 
  if(!font){
   return;
  }
 
- container.innerHTML = await buildSvgMarkup(font, text, 1400, 180, previewFill, iconKey, iconOptions);
+ container.innerHTML = await buildSvgMarkup(font, text, previewCanvas.width, previewCanvas.height, previewFill, iconKey, iconOptions);
 }
 
 async function updateAll(){
@@ -2886,7 +3403,37 @@ document.addEventListener("click", event=>{
  if(!event.target.closest(".picker-shell")){
   closePickerMenus();
  }
+
+ if(!event.target.closest(".bottle-preview")){
+  closeIconResizePanels();
+ }
 });
+
+document.addEventListener("pointerdown", beginActiveIconGesture);
+document.addEventListener("pointermove", moveActiveIconGesture);
+document.addEventListener("pointerup", endActiveIconGesture);
+document.addEventListener("pointercancel", endActiveIconGesture);
+
+document.addEventListener("wheel", event=>{
+ const target = event.target && event.target.closest
+  ? event.target.closest("[data-preview-icon-hit]")
+  : null;
+ const item = target ? target.closest(".item") : null;
+
+ if(!target || !item || !(item.dataset.iconKey || "")){
+  return;
+ }
+
+ event.preventDefault();
+
+ const current = getItemIconAdjustments(item);
+ const scaleFactor = event.deltaY < 0 ? 1.08 : (1 / 1.08);
+ setItemIconAdjustments(item, {
+  scale:current.scale * scaleFactor
+ });
+ syncBottleIcon(item);
+ schedulePreviewRedraw(item);
+}, { passive:false });
 
 document.addEventListener("keydown", event=>{
  if(event.key === "Escape"){
