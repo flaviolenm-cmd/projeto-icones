@@ -1,0 +1,2904 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UltraCell</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/svg2pdf.js@2.5.0/dist/svg2pdf.umd.min.js"></script>
+<script src="font-data.js"></script>
+<script src="svg-icon-manifest.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Bellota:wght@400;700&family=Berkshire+Swash&family=Great+Vibes&family=Pacifico&family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Cinzel:wght@400;600&family=Lobster&family=Montserrat:wght@600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+<style>
+body{
+ margin:0;
+ background:#f2f2f7;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+body > :not(script):not(.watermark-layer){
+ position:relative;
+ z-index:1;
+}
+
+.watermark-layer{
+ position:fixed;
+ inset:0;
+ z-index:0;
+ pointer-events:none;
+ overflow:hidden;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:flex-start;
+ padding:28px 0;
+ box-sizing:border-box;
+}
+
+.watermark-word{
+ width:100%;
+ text-align:center;
+ font-size:64px;
+ line-height:1;
+ font-weight:800;
+ letter-spacing:0.06em;
+ text-transform:uppercase;
+ color:rgba(17,17,17,0.035);
+ user-select:none;
+ white-space:nowrap;
+ margin:14px 0;
+}
+
+.banner{
+ background:#000;
+ color:#fff;
+ padding:25px;
+ text-align:center;
+}
+
+.search{
+ padding:18px 14px 14px;
+}
+
+.search-shell{
+ max-width:980px;
+ margin:0 auto;
+ padding:22px 24px 24px;
+ border-radius:28px;
+ background:
+  radial-gradient(circle at top center, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0) 56%),
+  linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(241,244,248,0.98) 100%);
+ box-shadow:0 18px 40px rgba(0,0,0,0.11);
+ border:1px solid rgba(17,17,17,0.08);
+ text-align:center;
+ position:relative;
+ overflow:hidden;
+}
+
+.search-shell::before{
+ content:"";
+ position:absolute;
+ inset:0;
+ border-radius:inherit;
+ border:1px solid rgba(255,255,255,0.72);
+ pointer-events:none;
+}
+
+.search-kicker{
+ margin:0 0 8px;
+ font-size:13px;
+ font-weight:900;
+ letter-spacing:0.16em;
+ text-transform:uppercase;
+ color:#111;
+ opacity:0.58;
+}
+
+.search-label{
+ display:block;
+ margin-bottom:12px;
+ font-size:24px;
+ font-weight:800;
+ line-height:1.1;
+ letter-spacing:0.01em;
+ text-transform:none;
+ color:#1a1a1a;
+}
+
+.search-helper{
+ margin:12px auto 0;
+ max-width:720px;
+ font-size:14px;
+ font-weight:600;
+ line-height:1.45;
+ color:#68717c;
+}
+
+.search input{
+ width:100%;
+ padding:22px 24px;
+ border-radius:22px;
+ border:1px solid #ced5dd;
+ background:linear-gradient(180deg, #f5f7fa 0%, #eceff4 100%);
+ font-size:38px;
+ font-weight:800;
+ letter-spacing:0.01em;
+ text-align:center;
+ color:#111;
+ box-sizing:border-box;
+ outline:none;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,0.8);
+ transition:border-color .2s ease, box-shadow .2s ease, background .2s ease, transform .2s ease;
+}
+
+.search input:focus{
+ border-color:#111;
+ background:#ffffff;
+ box-shadow:0 0 0 6px rgba(17,17,17,0.08), 0 12px 28px rgba(0,0,0,0.08);
+ transform:translateY(-1px);
+}
+
+.search input::placeholder{
+ color:#8e98a4;
+ font-weight:600;
+}
+
+.top-actions{
+ padding:10px;
+}
+
+.top-actions button{
+ width:100%;
+ padding:14px;
+ border:none;
+ border-radius:12px;
+ background:#007AFF;
+ color:#fff;
+ font-weight:600;
+}
+
+.section-title{
+ padding:10px;
+ font-weight:600;
+ opacity:0.6;
+}
+
+.notice{
+ position:fixed;
+ left:12px;
+ right:12px;
+ bottom:12px;
+ z-index:9999;
+ background:#111;
+ color:#fff;
+ border-radius:16px;
+ padding:14px 16px;
+ box-shadow:0 10px 30px rgba(0,0,0,0.22);
+ font-size:14px;
+ line-height:1.4;
+ opacity:0;
+ transform:translateY(12px);
+ pointer-events:none;
+ transition:opacity .2s ease, transform .2s ease;
+}
+
+.notice.show{
+ opacity:1;
+ transform:translateY(0);
+}
+
+.list{
+ padding:10px;
+ display:grid;
+ grid-template-columns:1fr;
+ gap:16px;
+}
+
+.item{
+ background:#fff;
+ border-radius:18px;
+ padding:16px 14px 14px;
+ box-shadow:0 4px 10px rgba(0,0,0,0.06);
+}
+
+.bottle{
+ position:relative;
+ width:100%;
+ max-width:860px;
+ aspect-ratio:11150 / 3860;
+ margin:0 auto 12px;
+ filter:drop-shadow(0 12px 20px rgba(0,0,0,0.12));
+}
+
+.bottle-frame{
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+ display:block;
+ overflow:visible;
+ shape-rendering:geometricPrecision;
+}
+
+.bottle-frame-slot{
+ position:absolute;
+ inset:0;
+}
+
+.bottle-frame-base,
+.bottle-frame-render-layer{
+ position:absolute;
+ inset:0;
+}
+
+.bottle-model-image{
+ position:absolute;
+ inset:0;
+ width:100%;
+ height:100%;
+ object-fit:contain;
+ display:block;
+}
+
+.bottle-shadow{
+ position:absolute;
+ left:24%;
+ right:8%;
+ bottom:4px;
+ height:16px;
+ border-radius:50%;
+ background:radial-gradient(circle, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.05) 48%, rgba(0,0,0,0) 82%);
+ pointer-events:none;
+}
+
+.bottle-preview{
+ position:absolute;
+ left:29.2%;
+ right:15.2%;
+ top:7.5%;
+ bottom:7.5%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ box-sizing:border-box;
+ padding:0 8px 0 4px;
+}
+
+.bottle-preview::before{
+ content:"";
+ position:absolute;
+ left:4%;
+ right:6%;
+ top:14%;
+ height:24%;
+ border-radius:999px;
+ background:linear-gradient(90deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 42%, rgba(255,255,255,0) 100%);
+ opacity:0.35;
+ pointer-events:none;
+}
+
+.preview-svg{
+ width:100%;
+ height:100%;
+ display:block;
+ position:relative;
+ z-index:1;
+}
+
+.bottle-tools{
+ margin-top:8px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:10px;
+ flex-wrap:wrap;
+}
+
+.picker-shell{
+ margin-top:8px;
+}
+
+.color-dot{
+ width:14px;
+ height:14px;
+ border-radius:50%;
+ border:2px solid #111;
+ background:#050505;
+ box-shadow:0 2px 5px rgba(0,0,0,0.18);
+ flex:0 0 auto;
+}
+
+.color-toggle,
+.icon-toggle{
+ padding:8px 14px;
+ border-radius:999px;
+ border:1px solid #c8ccd2;
+ background:#fff;
+ color:#111;
+ font-size:13px;
+ font-weight:700;
+ cursor:pointer;
+ transition:background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.color-toggle:hover,
+.icon-toggle:hover{
+ background:#f3f4f6;
+ border-color:#aeb4bd;
+}
+
+.color-toggle:active,
+.icon-toggle:active{
+ transform:translateY(1px);
+}
+
+.color-menu-panel,
+.icon-menu-panel{
+ display:none;
+ margin-top:12px;
+ padding:14px;
+ border-radius:16px;
+ border:1px solid #dde2e8;
+ background:#ffffff;
+ box-shadow:0 14px 32px rgba(0,0,0,0.08);
+}
+
+.item.color-menu-open .color-menu-panel{
+ display:block;
+}
+
+.item.icon-menu-open .icon-menu-panel{
+ display:block;
+}
+
+.color-menu-group + .color-menu-group{
+ margin-top:14px;
+ padding-top:14px;
+ border-top:1px solid #edf0f4;
+}
+
+.color-menu-title{
+ margin-bottom:10px;
+ font-size:12px;
+ font-weight:800;
+ letter-spacing:0.03em;
+ text-transform:uppercase;
+ color:#68707d;
+}
+
+.color-menu-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit, minmax(148px, 1fr));
+ gap:8px;
+}
+
+.color-option{
+ width:100%;
+ display:flex;
+ align-items:center;
+ gap:10px;
+ padding:10px 12px;
+ border-radius:12px;
+ border:1px solid #d6dbe2;
+ background:#ffffff;
+ color:#111111;
+ text-align:left;
+ font-size:14px;
+ font-weight:600;
+ cursor:pointer;
+ transition:border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.color-option:hover{
+ background:#f7f8fa;
+ border-color:#b9c1cc;
+}
+
+.color-option.is-selected{
+ background:#f3f4f6;
+ border-color:#111111;
+ box-shadow:inset 0 0 0 1px #111111;
+}
+
+.color-option-swatch{
+ width:18px;
+ height:18px;
+ border-radius:50%;
+ background:var(--swatch, #000000);
+ border:2px solid var(--swatch-border, #111111);
+ box-shadow:0 2px 4px rgba(0,0,0,0.12);
+ flex:0 0 auto;
+}
+
+.color-option-label{
+ display:block;
+ color:#707881;
+ background:linear-gradient(180deg, #eef1f3 0%, #aab1b8 22%, #fdfefe 42%, #7d858d 62%, #dde2e6 82%, #676f77 100%);
+ -webkit-background-clip:text;
+ background-clip:text;
+ -webkit-text-fill-color:transparent;
+}
+
+.icon-menu-header{
+ margin-bottom:14px;
+}
+
+.icon-menu-header-layout{
+ display:grid;
+ grid-template-columns:minmax(150px, 178px) minmax(0, 1fr);
+ gap:12px;
+ align-items:start;
+}
+
+.icon-clear-column .icon-menu-grid{
+ grid-template-columns:1fr;
+}
+
+.icon-clear-column .icon-option{
+ min-height:124px;
+}
+
+.icon-menu-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit, minmax(126px, 1fr));
+ gap:8px;
+}
+
+.icon-option{
+ width:100%;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+ padding:12px 10px;
+ border-radius:12px;
+ border:1px solid #d6dbe2;
+ background:#ffffff;
+ color:#111111;
+ text-align:center;
+ font-size:13px;
+ font-weight:700;
+ cursor:pointer;
+ transition:border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.icon-option:hover{
+ background:#f7f8fa;
+ border-color:#b9c1cc;
+}
+
+.icon-option.is-selected{
+ background:#f3f4f6;
+ border-color:#111111;
+ box-shadow:inset 0 0 0 1px #111111;
+}
+
+.icon-option-art{
+ width:56px;
+ height:56px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:#111111;
+}
+
+.icon-option-art img{
+ width:100%;
+ height:100%;
+ display:block;
+ object-fit:contain;
+}
+
+.icon-option-art-empty{
+ border-radius:50%;
+ border:1.5px dashed #9ca3af;
+ font-size:14px;
+ font-weight:800;
+ line-height:1;
+}
+
+.icon-option-label{
+ display:block;
+ line-height:1.2;
+}
+
+.icon-adjust-panel{
+ margin:0;
+ padding:10px;
+ border:1px solid #e6eaf0;
+ border-radius:12px;
+ background:#fbfcfd;
+}
+
+.icon-adjust-heading{
+ margin-bottom:8px;
+ font-size:11px;
+ font-weight:800;
+ letter-spacing:0.03em;
+ text-transform:uppercase;
+ color:#68707d;
+}
+
+.icon-adjust-grid{
+ display:grid;
+ gap:8px;
+}
+
+.icon-adjust-control{
+ display:grid;
+ gap:5px;
+}
+
+.icon-adjust-control.is-disabled{
+ opacity:0.45;
+}
+
+.icon-adjust-topline{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+ font-size:12px;
+ font-weight:700;
+ color:#1a1a1a;
+}
+
+.icon-adjust-value{
+ font-size:11px;
+ font-weight:800;
+ color:#6b7280;
+}
+
+.icon-adjust-actions{
+ display:grid;
+ gap:6px;
+}
+
+.icon-adjust-button-row{
+ display:grid;
+ grid-template-columns:repeat(2, minmax(0, 1fr));
+ gap:6px;
+}
+
+.icon-direction-grid{
+ display:grid;
+ grid-template-columns:repeat(3, minmax(0, 1fr));
+ gap:6px;
+}
+
+.icon-adjust-spacer{
+ min-height:1px;
+}
+
+.icon-adjust-button,
+.icon-adjust-reset{
+ width:100%;
+ padding:7px 8px;
+ border-radius:10px;
+ border:1px solid transparent;
+ color:#ffffff;
+ font-size:12px;
+ font-weight:700;
+ cursor:pointer;
+ box-shadow:0 6px 14px rgba(17,17,17,0.14);
+ transition:filter .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.icon-adjust-button{
+ background:linear-gradient(180deg, #3182f6 0%, #1557d6 100%);
+}
+
+.icon-adjust-button[data-icon-step="scale-up"]{
+ background:linear-gradient(180deg, #2bd67b 0%, #0f9f4f 100%);
+}
+
+.icon-adjust-button[data-icon-step="scale-down"]{
+ background:linear-gradient(180deg, #ff6b6b 0%, #d83b3b 100%);
+}
+
+.icon-adjust-button[data-icon-step="center"]{
+ background:linear-gradient(180deg, #717b8a 0%, #404a58 100%);
+}
+
+.icon-adjust-button[data-icon-step="rotate-left"],
+.icon-adjust-button[data-icon-step="rotate-right"]{
+ background:linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+}
+
+.icon-adjust-reset{
+ background:linear-gradient(180deg, #1f2937 0%, #000000 100%);
+}
+
+.icon-adjust-button:hover,
+.icon-adjust-reset:hover{
+ filter:brightness(1.08);
+}
+
+.icon-adjust-button:active,
+.icon-adjust-reset:active{
+ transform:translateY(1px);
+}
+
+.icon-adjust-button:disabled,
+.icon-adjust-reset:disabled{
+ opacity:0.45;
+ cursor:not-allowed;
+ box-shadow:none;
+ filter:none;
+}
+
+.actions{
+ margin-top:10px;
+ display:flex;
+ flex-direction:column;
+ gap:8px;
+}
+
+.font-name{
+ margin-top:8px;
+ text-align:center;
+ font-size:22px;
+ font-weight:700;
+ line-height:1.2;
+ color:#1a1a1a;
+}
+
+button.action{
+ width:100%;
+ max-width:270px;
+ margin:0 auto;
+ padding:10px 16px;
+ border:none;
+ border-radius:9px;
+ color:#fff;
+ font-size:14px;
+ font-weight:700;
+}
+
+.green{
+ background:#000000;
+}
+
+@media (max-width: 640px){
+ .search{
+  padding:16px 10px 12px;
+ }
+
+ .search-shell{
+  padding:18px 16px 18px;
+  border-radius:24px;
+ }
+
+ .search-kicker{
+  font-size:11px;
+  letter-spacing:0.14em;
+ }
+
+ .search-label{
+  font-size:20px;
+  margin-bottom:10px;
+ }
+
+ .search-helper{
+  font-size:13px;
+  margin-top:10px;
+ }
+
+ .search input{
+  padding:18px 16px;
+  font-size:30px;
+  border-radius:18px;
+ }
+
+ .watermark-word{
+  font-size:42px;
+  margin:12px 0;
+ }
+
+ .bottle{
+  max-width:none;
+ }
+
+ .bottle-preview{
+  left:29%;
+  right:14.5%;
+  top:9%;
+  bottom:9%;
+  padding:0 7px 0 4px;
+ }
+
+ .icon-menu-header-layout{
+  grid-template-columns:1fr;
+ }
+
+ .color-menu-grid{
+  grid-template-columns:1fr;
+ }
+}
+
+@media (min-width: 1180px){
+ .list{
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+ }
+}
+</style>
+</head>
+
+<body>
+
+<div id="watermarkLayer" class="watermark-layer" aria-hidden="true"></div>
+
+<div class="banner">
+<h1>UltraCell</h1>
+</div>
+
+<div class="search">
+<div class="search-shell">
+<p class="search-kicker">Personalização</p>
+<label class="search-label" for="nameInput">Digite seu nome aqui</label>
+<input type="text" id="nameInput" placeholder="Digite seu nome aqui" oninput="updateAll()">
+<p class="search-helper">A prévia abaixo acompanha o tamanho do nome e mantém a composição ajustada dentro da garrafa.</p>
+</div>
+</div>
+
+<div class="section-title">🔥 14 Fontes Fixas</div>
+<div class="list" id="fixedList"></div>
+
+<div class="top-actions bottom-actions">
+<button onclick="scrollToSuggestions()">✨ Sugerir fontes</button>
+</div>
+
+<div id="suggestions">
+<div class="section-title">✨ Sugestões Premium</div>
+<div class="list" id="suggestList"></div>
+</div>
+
+<div id="notice" class="notice"></div>
+
+<script>
+function slugify(value){
+ return value.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+}
+
+function createFont(config){
+ return {
+  id: slugify(config.label),
+  fallback: "sans-serif",
+  files: [],
+  isLocal: false,
+  ...config
+ };
+}
+
+const fixedFontCatalog = new Map([
+ ["Tiberias", createFont({ label:"Tiberias", cssFamily:"UC-Tiberias", files:["Tiberias.otf"], fallback:"serif", isLocal:true })],
+ ["daydream FREE", createFont({ label:"daydream FREE", cssFamily:"UC-daydream-FREE", files:["daydream FREE.ttf"], fallback:"cursive", isLocal:true })],
+ ["Thank you", createFont({ label:"Thank you", cssFamily:"UC-Thank-you", files:["Thank you.ttf"], fallback:"cursive", isLocal:true })],
+ ["hello honey", createFont({ label:"hello honey", cssFamily:"UC-hello-honey", files:["hello honey.otf"], fallback:"cursive", isLocal:true })],
+ ["Magneton Regular", createFont({ label:"Magneton Regular", cssFamily:"UC-Magneton-Regular", files:["Magneton Regular.ttf"], fallback:"sans-serif", isLocal:true })],
+ ["Autography", createFont({ label:"Autography", cssFamily:"UC-Autography", files:["Autography.otf"], fallback:"cursive", isLocal:true })],
+ ["chalala", createFont({ label:"chalala", cssFamily:"UC-chalala", files:["chalala.ttf"], fallback:"cursive", isLocal:true })],
+ ["Audiowide-Regular", createFont({ label:"Audiowide-Regular", cssFamily:"UC-Audiowide-Regular", files:["Audiowide-Regular.ttf"], fallback:"sans-serif", isLocal:true })],
+ ["Bellota-Regular", createFont({ label:"Bellota-Regular", cssFamily:"UC-Bellota-Regular", files:["Bellota-Regular.ttf"], fallback:"sans-serif", isLocal:true })],
+ ["BerkshireSwash-Regular", createFont({ label:"BerkshireSwash-Regular", cssFamily:"UC-BerkshireSwash-Regular", files:["BerkshireSwash-Regular.ttf"], fallback:"cursive", isLocal:true })],
+ ["Impact", createFont({ label:"Impact", cssFamily:"UC-Impact", files:["impact.ttf"], fallback:"sans-serif", isLocal:true })],
+ ["cattle-trail-jnl", createFont({ label:"cattle-trail-jnl", cssFamily:"UC-cattle-trail-jnl", files:["cattle-trail-jnl.otf"], fallback:"serif", isLocal:true })],
+ ["nabi-modern-font", createFont({ label:"nabi-modern-font", cssFamily:"UC-nabi-modern-font", files:["nabi-modern-font.ttf"], fallback:"sans-serif", isLocal:true })],
+ ["Nickainley-Normal", createFont({ label:"Nickainley-Normal", cssFamily:"UC-Nickainley-Normal", files:["Nickainley-Normal.otf"], fallback:"cursive", isLocal:true })]
+]);
+
+const fixedFontOrder = [
+ "Tiberias",
+ "daydream FREE",
+ "Thank you",
+ "hello honey",
+ "Magneton Regular",
+ "Autography",
+ "chalala",
+ "Audiowide-Regular",
+ "Bellota-Regular",
+ "BerkshireSwash-Regular",
+ "Impact",
+ "cattle-trail-jnl",
+ "nabi-modern-font",
+ "Nickainley-Normal"
+];
+
+const fixedFonts = fixedFontOrder
+ .map(label => fixedFontCatalog.get(label))
+ .filter(Boolean);
+
+const suggestFonts = [
+ createFont({ label:"Great Vibes", cssFamily:"Great Vibes", fallback:"cursive" }),
+ createFont({ label:"Pacifico", cssFamily:"Pacifico", fallback:"cursive" }),
+ createFont({ label:"Dancing Script", cssFamily:"Dancing Script", fallback:"cursive" }),
+ createFont({ label:"Playfair Display", cssFamily:"Playfair Display", fallback:"serif" }),
+ createFont({ label:"Cinzel", cssFamily:"Cinzel", fallback:"serif" }),
+ createFont({ label:"Lobster", cssFamily:"Lobster", fallback:"cursive" }),
+ createFont({ label:"Montserrat", cssFamily:"Montserrat", fallback:"sans-serif" }),
+ createFont({ label:"Poppins", cssFamily:"Poppins", fallback:"sans-serif" })
+];
+
+const allFonts = [...fixedFonts, ...suggestFonts];
+const fontMap = new Map(allFonts.map(font=>[font.id,font]));
+const openTypeFontCache = new Map();
+const EXPORT_WIDTH = 1280;
+const EXPORT_HEIGHT = 720;
+const PREVIEW_PATH_WIDTH_RATIO = 0.88;
+const PREVIEW_PATH_HEIGHT_RATIO = 0.66;
+const EXPORT_PATH_WIDTH_RATIO = 0.36;
+const EXPORT_PATH_HEIGHT_RATIO = 0.20;
+const ICON_SCALE_MIN = 0.7;
+const ICON_SCALE_MAX = 5;
+const ICON_OFFSET_X_MIN = -1.35;
+const ICON_OFFSET_X_MAX = 1.35;
+const ICON_OFFSET_Y_MIN = -1.15;
+const ICON_OFFSET_Y_MAX = 1.15;
+const ICON_TRAVEL_X_RATIO = 0.48;
+const ICON_TRAVEL_Y_RATIO = 0.46;
+const ICON_BASE_HEIGHT_RATIO = 0.17;
+const WATERMARK_TEXT = "Ultracell";
+const MODEL_STL_PATH = "model.stl";
+let textMeasureCanvas = null;
+let bottleGeometryPromise = null;
+const bottleModelCache = new Map();
+
+function clampByte(value){
+ return Math.max(0, Math.min(255, Math.round(value)));
+}
+
+function clamp(value, min, max){
+ return Math.max(min, Math.min(max, value));
+}
+
+function parseFiniteNumber(value, fallback = 0){
+ const parsed = Number(value);
+ return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function hexToRgb(hex){
+ const normalized = String(hex).replace("#", "");
+ const value = normalized.length === 3
+  ? normalized.split("").map(part=>part + part).join("")
+  : normalized;
+
+ return {
+  r: parseInt(value.slice(0, 2), 16),
+  g: parseInt(value.slice(2, 4), 16),
+  b: parseInt(value.slice(4, 6), 16)
+ };
+}
+
+function rgbToHex(rgb){
+ return `#${[rgb.r, rgb.g, rgb.b]
+  .map(channel=>clampByte(channel).toString(16).padStart(2, "0"))
+  .join("")}`;
+}
+
+function mixHex(baseHex, targetHex, ratio = 0.5){
+ const base = hexToRgb(baseHex);
+ const target = hexToRgb(targetHex);
+
+ return rgbToHex({
+  r:(base.r * (1 - ratio)) + (target.r * ratio),
+  g:(base.g * (1 - ratio)) + (target.g * ratio),
+  b:(base.b * (1 - ratio)) + (target.b * ratio)
+ });
+}
+
+function createBottleTheme(config){
+ const light = Boolean(config.light);
+ const base = config.base;
+ const rgb = hexToRgb(base);
+ const brightness = ((rgb.r * 0.299) + (rgb.g * 0.587) + (rgb.b * 0.114)) / 255;
+
+ return {
+  key:config.key,
+  label:config.label,
+  light,
+  body:config.body || base,
+  rightCap:config.rightCap || mixHex(base, "#000000", light ? 0.22 : 0.16),
+  centerRing:config.centerRing || mixHex(base, "#000000", light ? 0.30 : 0.22),
+  neck:config.neck || mixHex(base, "#000000", light ? 0.18 : 0.10),
+  front:config.front || mixHex(base, "#000000", light ? 0.10 : 0.05),
+  inner:config.inner || "#ffffff",
+  highlight:config.highlight || (light ? "#111111" : "#ffffff"),
+  highlightOpacity:config.highlightOpacity || (light ? "0.05" : "0.09"),
+  previewFill:config.previewFill || (brightness >= 0.68 ? "metallic-steel-dark" : "metallic-silver"),
+  dot:config.dot || base,
+  dotBorder:config.dotBorder || (light ? mixHex(base, "#000000", 0.45) : "#111111")
+ };
+}
+
+const bottleThemes = {
+ preto:createBottleTheme({
+  key:"preto",
+  label:"Preto",
+  base:"#050505",
+  body:"#030303",
+  rightCap:"#9b9b9b",
+  centerRing:"#8c8c8c",
+  neck:"#030303",
+  front:"#050505",
+  inner:"#ffffff",
+  dot:"#050505",
+  dotBorder:"#111111"
+ }),
+ branco:createBottleTheme({
+  key:"branco",
+  label:"Branco",
+  base:"#ffffff",
+  body:"#ffffff",
+  rightCap:"#b0b0b0",
+  centerRing:"#9a9a9a",
+  neck:"#ffffff",
+  front:"#ffffff",
+  inner:"#ffffff",
+  dot:"#ffffff",
+  dotBorder:"#7a7a7a",
+  light:true
+ }),
+ areia:createBottleTheme({
+  key:"areia",
+  label:"Areia",
+  base:"#d8c2a1",
+  light:true
+ }),
+ caqui:createBottleTheme({
+  key:"caqui",
+  label:"Cáqui",
+  base:"#9b8c67"
+ }),
+ creme:createBottleTheme({
+  key:"creme",
+  label:"Creme",
+  base:"#f1e7d4",
+  light:true
+ }),
+ tiffany:createBottleTheme({
+  key:"tiffany",
+  label:"Tiffany",
+  base:"#63d7ce"
+ }),
+ petroleo:createBottleTheme({
+  key:"petroleo",
+  label:"Petróleo",
+  base:"#264c58"
+ }),
+ ceu:createBottleTheme({
+  key:"ceu",
+  label:"Céu",
+  base:"#4ea3f2"
+ }),
+ nuvem:createBottleTheme({
+  key:"nuvem",
+  label:"Nuvem",
+  base:"#dcecff",
+  light:true
+ }),
+ pistache:createBottleTheme({
+  key:"pistache",
+  label:"Pistache",
+  base:"#bfd89c",
+  light:true
+ }),
+ mirtilo:createBottleTheme({
+  key:"mirtilo",
+  label:"Mirtilo",
+  base:"#49548f"
+ }),
+ pitaya:createBottleTheme({
+  key:"pitaya",
+  label:"Pitaya",
+  base:"#df4b83"
+ }),
+ chocolate:createBottleTheme({
+  key:"chocolate",
+  label:"Chocolate",
+  base:"#4b2f22"
+ }),
+ lavanda:createBottleTheme({
+  key:"lavanda",
+  label:"Lavanda",
+  base:"#b59add",
+  light:true
+ }),
+ celeste:createBottleTheme({
+  key:"celeste",
+  label:"Celeste",
+  base:"#73d8ff",
+  light:true
+ }),
+ amarelo:createBottleTheme({
+  key:"amarelo",
+  label:"Amarelo",
+  base:"#f4d13f",
+  light:true
+ }),
+ "verde-citrus":createBottleTheme({
+  key:"verde-citrus",
+  label:"Verde Citrus",
+  base:"#80d62f"
+ }),
+ vermelho:createBottleTheme({
+  key:"vermelho",
+  label:"Vermelho",
+  base:"#c8272f"
+ }),
+ laranja:createBottleTheme({
+  key:"laranja",
+  label:"Laranja",
+  base:"#ef7b22"
+ })
+};
+
+const bottleColorGroups = [
+ {
+  title:"Cores Clássicas e Neutras",
+  colors:["preto", "branco", "areia", "caqui", "creme"]
+ },
+ {
+  title:"Tons de Azul e Verde",
+  colors:["tiffany", "petroleo", "ceu", "nuvem", "pistache", "mirtilo"]
+ },
+ {
+  title:"Tons Vibrantes e Quentes",
+  colors:["pitaya", "chocolate", "lavanda", "celeste", "amarelo", "verde-citrus", "vermelho", "laranja"]
+ }
+];
+
+const INLINE_ICON_VIEWBOX = "0 0 1024 1024";
+const svgIconManifest = window.SVG_ICON_MANIFEST || { categories:[] };
+
+function createIcon(config){
+ const merged = {
+  kind:"svg",
+  width:320,
+  height:320,
+  src:"",
+  label:"Ícone",
+  ...config
+ };
+
+ return {
+  ...merged,
+  viewBox:merged.viewBox || INLINE_ICON_VIEWBOX,
+  markup:merged.markup || ""
+ };
+}
+
+function normalizeManifestCategory(category, index){
+ const safeCategory = category || {};
+ const icons = Array.isArray(safeCategory.icons) ? safeCategory.icons : [];
+
+ return {
+  key:safeCategory.key || `categoria-${index + 1}`,
+  title:safeCategory.title || `Categoria ${index + 1}`,
+  icons:icons.map((icon, iconIndex)=>createIcon({
+   key:(icon && icon.key) || `icone-${index + 1}-${iconIndex + 1}`,
+   label:(icon && icon.label) || `Ícone ${iconIndex + 1}`,
+   width:icon && icon.width,
+   height:icon && icon.height,
+   src:icon && icon.src,
+   viewBox:icon && icon.viewBox,
+   markup:icon && icon.markup
+  }))
+ };
+}
+
+const normalizedIconCategories = (Array.isArray(svgIconManifest.categories) ? svgIconManifest.categories : [])
+ .map(normalizeManifestCategory)
+ .filter(category=>category.icons.length > 0);
+
+const iconCatalog = normalizedIconCategories.flatMap(category=>category.icons);
+const iconGroups = normalizedIconCategories.map(category=>({
+ title:category.title,
+ icons:category.icons.map(icon=>icon.key)
+}));
+const iconMap = new Map(iconCatalog.map(icon=>[icon.key, icon]));
+
+function mountLocalFontFaces(){
+ return;
+}
+
+function renderWatermark(){
+ const layer = document.getElementById("watermarkLayer");
+ if(!layer){
+  return;
+ }
+
+ const approximateRowHeight = window.innerWidth <= 640 ? 66 : 92;
+ const rowCount = Math.ceil(window.innerHeight / approximateRowHeight) + 2;
+
+ layer.innerHTML = Array.from({ length:rowCount }, ()=>`
+<div class="watermark-word">${WATERMARK_TEXT}</div>`.trim()).join("");
+}
+
+function canRenderBottleModel(){
+ return Boolean(window.THREE);
+}
+
+function normalizeBottleGeometryForHorizontalDisplay(geometry){
+ geometry.computeVertexNormals();
+ geometry.computeBoundingBox();
+
+ const size = new THREE.Vector3();
+ geometry.boundingBox.getSize(size);
+
+ if(size.y >= size.x && size.y >= size.z){
+  geometry.rotateZ(-Math.PI / 2);
+ }else if(size.z >= size.x && size.z >= size.y){
+  geometry.rotateY(Math.PI / 2);
+ }
+
+ geometry.computeBoundingBox();
+ geometry.boundingBox.getSize(size);
+
+ if(size.y < size.z){
+  geometry.rotateX(Math.PI / 2);
+ }
+
+ geometry.computeBoundingBox();
+ geometry.center();
+ return geometry;
+}
+
+function parseBinarySTL(arrayBuffer){
+ if(!window.THREE || !arrayBuffer){
+  return null;
+ }
+
+ const view = new DataView(arrayBuffer);
+ if(view.byteLength < 84){
+  return null;
+ }
+
+ const faceCount = view.getUint32(80, true);
+ const expectedLength = 84 + (faceCount * 50);
+ if(expectedLength > view.byteLength){
+  return null;
+ }
+
+ const positions = new Float32Array(faceCount * 9);
+ const normals = new Float32Array(faceCount * 9);
+ let offset = 84;
+
+ for(let face = 0; face < faceCount; face++){
+  const normalX = view.getFloat32(offset, true);
+  const normalY = view.getFloat32(offset + 4, true);
+  const normalZ = view.getFloat32(offset + 8, true);
+  offset += 12;
+
+  for(let vertex = 0; vertex < 3; vertex++){
+   const index = (face * 9) + (vertex * 3);
+   positions[index] = view.getFloat32(offset, true);
+   positions[index + 1] = view.getFloat32(offset + 4, true);
+   positions[index + 2] = view.getFloat32(offset + 8, true);
+
+   normals[index] = normalX;
+   normals[index + 1] = normalY;
+   normals[index + 2] = normalZ;
+   offset += 12;
+  }
+
+  offset += 2;
+ }
+
+ const geometry = new THREE.BufferGeometry();
+ geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+ geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
+ return geometry;
+}
+
+function loadBottleGeometry(){
+ if(bottleGeometryPromise){
+  return bottleGeometryPromise;
+ }
+
+ if(!canRenderBottleModel()){
+  bottleGeometryPromise = Promise.resolve(null);
+  return bottleGeometryPromise;
+ }
+
+ bottleGeometryPromise = new Promise(resolve=>{
+  try{
+   let geometry = null;
+
+   if(window.__MODEL_STL_BASE64__){
+    geometry = parseBinarySTL(base64ToArrayBuffer(window.__MODEL_STL_BASE64__));
+   }
+
+   if(!geometry){
+    resolve(null);
+    return;
+   }
+
+   resolve(normalizeBottleGeometryForHorizontalDisplay(geometry));
+  }catch(error){
+   console.error(error);
+   resolve(null);
+  }
+ });
+
+ return bottleGeometryPromise;
+}
+
+function sampleSteelTone(progress){
+ const stops = [
+  "#596066",
+  "#cfd4d9",
+  "#7a828a",
+  "#eef1f3",
+  "#8f969d",
+  "#4f565d"
+ ];
+
+ const clamped = Math.max(0, Math.min(0.9999, progress));
+ const scaled = clamped * (stops.length - 1);
+ const index = Math.floor(scaled);
+ const ratio = scaled - index;
+
+ return mixHex(stops[index], stops[Math.min(index + 1, stops.length - 1)], ratio);
+}
+
+function createBottleModelGeometryForTheme(baseGeometry, palette){
+ const geometry = baseGeometry.clone();
+ geometry.computeBoundingBox();
+
+ const position = geometry.getAttribute("position");
+ const colorArray = new Float32Array(position.count * 3);
+ const xMin = geometry.boundingBox.min.x;
+ const xMax = geometry.boundingBox.max.x;
+ const span = Math.max(1, xMax - xMin);
+ const color = new THREE.Color();
+
+ for(let i = 0; i < position.count; i++){
+  const xNorm = (position.getX(i) - xMin) / span;
+  let hex = palette.body;
+
+  if(xNorm >= 0.9){
+   hex = sampleSteelTone((xNorm - 0.9) / 0.1);
+  }else if(xNorm >= 0.08 && xNorm <= 0.18){
+   hex = sampleSteelTone((xNorm - 0.08) / 0.10);
+  }else if(xNorm < 0.08){
+   hex = palette.front;
+  }else if(xNorm < 0.24){
+   hex = palette.neck;
+  }
+
+  color.set(hex);
+  colorArray[i * 3] = color.r;
+  colorArray[(i * 3) + 1] = color.g;
+  colorArray[(i * 3) + 2] = color.b;
+ }
+
+ geometry.setAttribute("color", new THREE.Float32BufferAttribute(colorArray, 3));
+ return geometry;
+}
+
+function canvasHasVisiblePixels(renderer, width, height){
+ if(!renderer){
+  return false;
+ }
+
+ try{
+  const gl = renderer.getContext();
+  const samples = [
+   [Math.floor(width * 0.5), Math.floor(height * 0.5)],
+   [Math.floor(width * 0.35), Math.floor(height * 0.5)],
+   [Math.floor(width * 0.65), Math.floor(height * 0.5)],
+   [Math.floor(width * 0.5), Math.floor(height * 0.35)],
+   [Math.floor(width * 0.5), Math.floor(height * 0.65)]
+  ];
+  const pixel = new Uint8Array(4);
+
+  for(const [x, y] of samples){
+   gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
+   if(pixel[3] > 0){
+    return true;
+   }
+  }
+ }catch(error){
+  console.error(error);
+ }
+
+ return false;
+}
+
+async function renderBottleModelDataUrl(theme){
+ if(bottleModelCache.has(theme)){
+  return bottleModelCache.get(theme);
+ }
+
+ const geometry = await loadBottleGeometry();
+ if(!geometry || !canRenderBottleModel()){
+  return null;
+ }
+
+ const palette = getBottleTheme(theme);
+ const renderPromise = new Promise(resolve=>{
+  const width = 1400;
+  const height = 375;
+  const aspect = width / height;
+  const scene = new THREE.Scene();
+  const renderGeometry = createBottleModelGeometryForTheme(geometry, palette);
+
+  renderGeometry.computeBoundingBox();
+  const size = new THREE.Vector3();
+  renderGeometry.boundingBox.getSize(size);
+
+  const material = new THREE.MeshStandardMaterial({
+   vertexColors:true,
+   roughness: 0.88,
+   metalness: 0.12,
+   side:THREE.DoubleSide
+  });
+
+  const mesh = new THREE.Mesh(renderGeometry, material);
+  mesh.rotation.y = -0.06;
+  mesh.rotation.x = 0.02;
+  scene.add(mesh);
+
+  const ambient = new THREE.AmbientLight(0xffffff, 1.7);
+  const key = new THREE.DirectionalLight(0xffffff, 1.3);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.75);
+  const rim = new THREE.DirectionalLight(0xffffff, 0.5);
+
+  key.position.set(2.8, 2.2, 3.5);
+  fill.position.set(-2.2, 0.8, 2.4);
+  rim.position.set(-1.5, 2.6, -2.8);
+
+  scene.add(ambient, key, fill, rim);
+
+  const halfHeight = Math.max(size.y / 2, size.x / (2 * aspect)) * 1.18;
+  const cameraDistance = Math.max(size.z * 3.2, size.x * 1.15, size.y * 1.4, 600);
+  const camera = new THREE.OrthographicCamera(
+   -halfHeight * aspect,
+   halfHeight * aspect,
+   halfHeight,
+   -halfHeight,
+   0.1,
+   cameraDistance + (size.z * 8) + 1000
+  );
+
+  camera.position.set(0, 0, cameraDistance);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({
+   antialias:true,
+   alpha:true,
+   preserveDrawingBuffer:true
+  });
+
+  try{
+   renderer.setPixelRatio(1);
+   renderer.setSize(width, height, false);
+   renderer.setClearColor(0x000000, 0);
+   renderer.outputColorSpace = THREE.SRGBColorSpace;
+   renderer.render(scene, camera);
+
+   if(!canvasHasVisiblePixels(renderer, width, height)){
+    resolve(null);
+    return;
+   }
+
+   resolve(renderer.domElement.toDataURL("image/png"));
+  }catch(error){
+   console.error(error);
+   resolve(null);
+  }finally{
+   renderGeometry.dispose();
+   material.dispose();
+   renderer.dispose();
+  }
+ });
+
+ bottleModelCache.set(theme, renderPromise);
+ return renderPromise;
+}
+
+function renderBottleFrameInto(frameSlot, theme){
+ if(!frameSlot){
+  return;
+ }
+
+ frameSlot.dataset.themeKey = theme;
+ frameSlot.innerHTML = buildBottleFrame(theme);
+}
+
+function getPreviewFitConfig(text){
+ const length = Math.max(1, String(text || "").trim().length);
+
+ return {
+  widthRatio: Math.min(0.999, 0.978 + Math.max(0, length - 8) * 0.0018),
+  heightRatio: length <= 8 ? 1.05 : length <= 12 ? 1.01 : length <= 18 ? 0.97 : length <= 24 ? 0.94 : 0.91,
+  minSize:40,
+  maxSize:480
+ };
+}
+
+function getMeasureCanvas(){
+ if(!textMeasureCanvas){
+  textMeasureCanvas = document.createElement("canvas");
+ }
+
+ return textMeasureCanvas;
+}
+
+function base64ToArrayBuffer(base64){
+ const binary = atob(base64);
+ const bytes = new Uint8Array(binary.length);
+
+ for(let i = 0; i < binary.length; i++){
+  bytes[i] = binary.charCodeAt(i);
+ }
+
+ return bytes.buffer;
+}
+
+async function getOpenTypeFont(font){
+ if(!font.isLocal || !window.opentype){
+  return null;
+ }
+
+ if(openTypeFontCache.has(font.cssFamily)){
+  return openTypeFontCache.get(font.cssFamily);
+ }
+
+ try{
+  const fontData = window.__FONT_DATA__ && window.__FONT_DATA__[font.cssFamily];
+  if(!fontData || !fontData.base64){
+   openTypeFontCache.set(font.cssFamily, null);
+   return null;
+  }
+
+  const parsedFont = window.opentype.parse(base64ToArrayBuffer(fontData.base64));
+  openTypeFontCache.set(font.cssFamily, parsedFont);
+  return parsedFont;
+ }catch(error){
+  console.error(error);
+  openTypeFontCache.set(font.cssFamily, null);
+  return null;
+ }
+}
+
+function create(){
+ fixedFonts.forEach(font=>{
+  document.getElementById("fixedList").appendChild(createItem(font));
+ });
+
+ suggestFonts.forEach(font=>{
+  document.getElementById("suggestList").appendChild(createItem(font));
+ });
+}
+
+function createItem(font){
+ const el = document.createElement("div");
+ el.className = "item";
+ el.dataset.bottleTheme = "preto";
+ el.dataset.iconKey = "";
+ el.dataset.iconScale = "1";
+ el.dataset.iconOffsetX = "0";
+ el.dataset.iconOffsetY = "0";
+ el.dataset.iconRotation = "0";
+ const actionLabel = isAppleMobile()
+  ? "Compartilhar PDF"
+  : "Compartilhar no WhatsApp";
+
+ el.innerHTML = `
+ <div class="bottle">
+  <div class="bottle-frame-slot">
+   ${buildBottleFrame(el.dataset.bottleTheme)}
+  </div>
+  <div class="bottle-preview">
+   <div class="preview-svg" data-font-id="${font.id}"></div>
+  </div>
+ <div class="bottle-shadow"></div>
+ </div>
+
+ <div class="picker-shell">
+  <div class="bottle-tools">
+   <span class="color-dot" aria-hidden="true"></span>
+   <button class="color-toggle" type="button" aria-expanded="false" onclick="toggleColorMenu(this)">Alterar cor</button>
+   <button class="icon-toggle" type="button" aria-expanded="false" onclick="toggleIconMenu(this)">Adicionar ícone</button>
+  </div>
+  <div class="color-menu-panel">
+   ${buildColorMenu()}
+  </div>
+  <div class="icon-menu-panel">
+   ${buildIconMenu()}
+  </div>
+ </div>
+
+ <div class="font-name">${font.label}</div>
+
+ <div class="actions">
+  <button class="action green" onclick="enviarWhats(this, '${font.id}')">${actionLabel}</button>
+ </div>
+ `;
+
+ syncBottleTheme(el);
+ syncBottleIcon(el);
+ return el;
+}
+
+function getBottleTheme(theme = "preto"){
+ const aliases = {
+  black:"preto",
+  white:"branco"
+ };
+
+ const key = aliases[theme] || theme;
+ return bottleThemes[key] || bottleThemes.preto;
+}
+
+function getDefaultIconAdjustments(){
+ return {
+  scale:1,
+  offsetX:0,
+  offsetY:0,
+  rotation:0
+ };
+}
+
+function getItemIconAdjustments(item){
+ const defaults = getDefaultIconAdjustments();
+
+ return {
+  scale:clamp(parseFiniteNumber(item?.dataset?.iconScale, defaults.scale), ICON_SCALE_MIN, ICON_SCALE_MAX),
+  offsetX:clamp(parseFiniteNumber(item?.dataset?.iconOffsetX, defaults.offsetX), ICON_OFFSET_X_MIN, ICON_OFFSET_X_MAX),
+  offsetY:clamp(parseFiniteNumber(item?.dataset?.iconOffsetY, defaults.offsetY), ICON_OFFSET_Y_MIN, ICON_OFFSET_Y_MAX),
+  rotation:parseFiniteNumber(item?.dataset?.iconRotation, defaults.rotation)
+ };
+}
+
+function setItemIconAdjustments(item, partial = {}){
+ if(!item){
+  return getDefaultIconAdjustments();
+ }
+
+ const current = getItemIconAdjustments(item);
+ const next = {
+  ...current,
+  ...partial
+ };
+
+ item.dataset.iconScale = String(clamp(parseFiniteNumber(next.scale, current.scale), ICON_SCALE_MIN, ICON_SCALE_MAX));
+ item.dataset.iconOffsetX = String(clamp(parseFiniteNumber(next.offsetX, current.offsetX), ICON_OFFSET_X_MIN, ICON_OFFSET_X_MAX));
+ item.dataset.iconOffsetY = String(clamp(parseFiniteNumber(next.offsetY, current.offsetY), ICON_OFFSET_Y_MIN, ICON_OFFSET_Y_MAX));
+ item.dataset.iconRotation = String(parseFiniteNumber(next.rotation, current.rotation));
+
+ return getItemIconAdjustments(item);
+}
+
+function resetItemIconAdjustments(item){
+ return setItemIconAdjustments(item, getDefaultIconAdjustments());
+}
+
+function formatSignedPercent(value){
+ const rounded = Math.round(value);
+ return rounded > 0 ? `+${rounded}%` : `${rounded}%`;
+}
+
+function buildColorMenu(){
+ return bottleColorGroups.map(group=>`
+<div class="color-menu-group">
+ <div class="color-menu-title">${group.title}</div>
+ <div class="color-menu-grid">
+  ${group.colors.map(colorKey=>{
+   const palette = getBottleTheme(colorKey);
+   return `
+  <button
+   class="color-option"
+   type="button"
+   data-color-key="${palette.key}"
+   aria-pressed="false"
+   onclick="selectBottleColor(this, '${palette.key}')"
+  >
+   <span class="color-option-swatch" style="--swatch:${palette.dot};--swatch-border:${palette.dotBorder};"></span>
+   <span class="color-option-label">${palette.label}</span>
+  </button>`.trim();
+  }).join("")}
+ </div>
+</div>`.trim()).join("");
+}
+
+function getIconDefinition(key){
+ return key ? (iconMap.get(key) || null) : null;
+}
+
+function buildIconPreviewMarkup(icon){
+ return `<img src="${escapeXml(icon.src)}" alt="${escapeXml(icon.label)}" loading="lazy">`;
+}
+
+function buildIconAdjustControls(){
+ return `
+<div class="icon-adjust-panel">
+ <div class="icon-adjust-heading">Ajuste do ícone</div>
+ <div class="icon-adjust-grid">
+  <div class="icon-adjust-control" data-adjust-field="scale">
+   <span class="icon-adjust-topline">
+   <span>Aumentar ícone</span>
+   <span class="icon-adjust-value" data-icon-scale-value>100%</span>
+   </span>
+   <div class="icon-adjust-actions">
+    <div class="icon-adjust-button-row">
+     <button class="icon-adjust-button" type="button" data-icon-step="scale-down" onclick="stepBottleIconScale(this, -0.25)">-</button>
+     <button class="icon-adjust-button" type="button" data-icon-step="scale-up" onclick="stepBottleIconScale(this, 0.25)">+</button>
+    </div>
+   </div>
+  </div>
+  <div class="icon-adjust-control" data-adjust-field="move">
+   <span class="icon-adjust-topline">
+    <span>Mover ícone</span>
+    <span class="icon-adjust-value" data-icon-position-value>X 0% • Y 0%</span>
+   </span>
+   <div class="icon-adjust-actions">
+    <div class="icon-direction-grid">
+     <span class="icon-adjust-spacer" aria-hidden="true"></span>
+     <button class="icon-adjust-button" type="button" data-icon-step="up" onclick="stepBottleIconOffset(this, 'y', -0.14)">↑</button>
+     <span class="icon-adjust-spacer" aria-hidden="true"></span>
+     <button class="icon-adjust-button" type="button" data-icon-step="left" onclick="stepBottleIconOffset(this, 'x', -0.08)">←</button>
+     <button class="icon-adjust-button" type="button" data-icon-step="center" onclick="resetBottleIconPosition(this)">•</button>
+     <button class="icon-adjust-button" type="button" data-icon-step="right" onclick="stepBottleIconOffset(this, 'x', 0.08)">→</button>
+     <span class="icon-adjust-spacer" aria-hidden="true"></span>
+     <button class="icon-adjust-button" type="button" data-icon-step="down" onclick="stepBottleIconOffset(this, 'y', 0.14)">↓</button>
+     <span class="icon-adjust-spacer" aria-hidden="true"></span>
+    </div>
+   </div>
+  </div>
+  <div class="icon-adjust-control" data-adjust-field="rotation">
+   <span class="icon-adjust-topline">
+    <span>Rotacionar ícone</span>
+    <span class="icon-adjust-value" data-icon-rotation-value>0°</span>
+   </span>
+   <div class="icon-adjust-actions">
+    <div class="icon-adjust-button-row">
+     <button class="icon-adjust-button" type="button" data-icon-step="rotate-left" onclick="stepBottleIconRotation(this, -15)">↺</button>
+     <button class="icon-adjust-button" type="button" data-icon-step="rotate-right" onclick="stepBottleIconRotation(this, 15)">↻</button>
+    </div>
+   </div>
+  </div>
+  <button class="icon-adjust-reset" type="button" onclick="resetBottleIconAdjustments(this)">Voltar ao padrão</button>
+ </div>
+</div>`.trim();
+}
+
+function buildIconMenu(){
+ const clearOption = `
+<div class="icon-menu-header">
+ <div class="icon-menu-header-layout">
+  <div class="icon-clear-column">
+   <div class="icon-menu-grid">
+    <button class="icon-option" type="button" data-icon-key="" aria-pressed="true" onclick="selectBottleIcon(this, '')">
+     <span class="icon-option-art icon-option-art-empty">+</span>
+     <span class="icon-option-label">Sem ícone</span>
+    </button>
+   </div>
+  </div>
+  <div class="icon-adjust-column">
+   ${buildIconAdjustControls()}
+  </div>
+ </div>
+</div>`.trim();
+
+ const groupsMarkup = iconGroups.map(group=>`
+<div class="color-menu-group">
+ <div class="color-menu-title">${group.title}</div>
+ <div class="icon-menu-grid">
+  ${group.icons.map(iconKey=>{
+   const icon = getIconDefinition(iconKey);
+   return `
+  <button
+   class="icon-option"
+   type="button"
+   data-icon-key="${icon.key}"
+   aria-pressed="false"
+   onclick="selectBottleIcon(this, '${icon.key}')"
+  >
+   <span class="icon-option-art">${buildIconPreviewMarkup(icon)}</span>
+   <span class="icon-option-label">${icon.label}</span>
+  </button>`.trim();
+  }).join("")}
+ </div>
+</div>`.trim()).join("");
+
+ return `${clearOption}${groupsMarkup}`;
+}
+
+function buildBottleFrame(theme = "preto"){
+ const palette = getBottleTheme(theme);
+ const matteId = palette.key;
+ const bodyTop = mixHex(palette.body, "#ffffff", palette.light ? 0.055 : 0.035);
+ const bodyMid = mixHex(palette.body, "#ffffff", palette.light ? 0.024 : 0.012);
+ const bodyBottom = mixHex(palette.body, "#000000", palette.light ? 0.10 : 0.14);
+ const grainWhiteOpacity = palette.light ? "0.08" : "0.05";
+ const grainDarkOpacity = palette.light ? "0.04" : "0.06";
+ const grainStrokeWhite = palette.light ? "0.045" : "0.03";
+ const grainStrokeDark = palette.light ? "0.03" : "0.04";
+ const outlineColor = "#373435";
+ const whiteStrokeOpacity = palette.light ? "0.72" : "0.94";
+
+ return `
+<svg class="bottle-frame" viewBox="-1000 4180 11150 3860" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+ <defs>
+  <linearGradient id="steel-fill-${matteId}" x1="0%" y1="0%" x2="100%" y2="0%">
+   <stop offset="0%" stop-color="#5f666d"/>
+   <stop offset="20%" stop-color="#cfd4d9"/>
+   <stop offset="46%" stop-color="#7f878f"/>
+   <stop offset="66%" stop-color="#eef1f3"/>
+   <stop offset="84%" stop-color="#8e959d"/>
+   <stop offset="100%" stop-color="#585f66"/>
+  </linearGradient>
+  <linearGradient id="body-fill-${matteId}" x1="0%" y1="0%" x2="0%" y2="100%">
+   <stop offset="0%" stop-color="${bodyTop}"/>
+   <stop offset="45%" stop-color="${bodyMid}"/>
+   <stop offset="100%" stop-color="${bodyBottom}"/>
+  </linearGradient>
+  <pattern id="matte-grain-${matteId}" width="32" height="32" patternUnits="userSpaceOnUse">
+   <rect width="32" height="32" fill="transparent"/>
+   <circle cx="6" cy="7" r="0.9" fill="#ffffff" fill-opacity="${grainWhiteOpacity}"/>
+   <circle cx="20" cy="11" r="0.7" fill="#000000" fill-opacity="${grainDarkOpacity}"/>
+   <circle cx="11" cy="23" r="0.8" fill="#ffffff" fill-opacity="${grainWhiteOpacity}"/>
+   <circle cx="25" cy="25" r="0.7" fill="#000000" fill-opacity="${grainDarkOpacity}"/>
+   <path d="M4 16 H9" stroke="#ffffff" stroke-opacity="${grainStrokeWhite}" stroke-width="0.45" stroke-linecap="round"/>
+   <path d="M21 6 H26" stroke="#000000" stroke-opacity="${grainStrokeDark}" stroke-width="0.45" stroke-linecap="round"/>
+  </pattern>
+ </defs>
+ <g stroke="${outlineColor}" stroke-width="8.47" stroke-miterlimit="22.9256">
+  <path d="M9632.95 6061.61c0,864.86 -241.57,1605.13 -583.74,1909.4l466.48 1.17c347.15,-298.74 584.87,-1037.6 584.87,-1910.57 0,-818.9 -216.56,-1526.06 -530.05,-1857.22l-467.61 0c313.49,331.17 530.05,1038.32 530.05,1857.22z" fill="url(#steel-fill-${matteId})"/>
+  <path d="M906.03 6073.29c0,-610.94 -121.71,-1159.42 -314.7,-1534.55l-1036.27 0c-278.07,0 -505.5,227.46 -505.5,505.49l0 793.14 0 471.84 0 779.04c0,278.03 227.43,505.48 505.46,505.48l1043.48 0c188.82,-374.7 307.53,-917.1 307.53,-1520.44zm-814.02 19.47c0,421.49 66.05,811.21 177.97,1127.68 -65.5,73.29 -160.66,119.61 -266.1,119.61l-296.85 0c-196.39,0 -357.07,-160.66 -357.07,-357.06l0 -1842.76c0,-196.4 160.68,-357.07 357.07,-357.07l296.85 0c114.25,0 216.44,54.38 281.92,138.54 -121.49,323.93 -193.79,730.12 -193.79,1171.06z" fill="url(#body-fill-${matteId})"/>
+  <path d="M591.33 4538.74c192.99,375.13 314.7,923.61 314.7,1534.55 0,603.34 -118.71,1145.74 -307.53,1520.44l489.12 0c181.15,-375.36 294.33,-908.97 294.33,-1500.95 0,-620.48 -124.33,-1176.82 -320.94,-1554.04l-469.68 0z" fill="url(#body-fill-${matteId})"/>
+  <path d="M1061.01 4538.74c196.61,377.22 320.94,933.56 320.94,1554.04 0,591.98 -113.18,1125.59 -294.33,1500.95 -10.83,22.45 -21.9,44.31 -33.21,65.6l444.87 0c206.47,-377.37 338.05,-947.78 338.05,-1586.04 0,-638.3 -131.6,-1208.71 -338.07,-1586.08 -4.21,-7.71 -8.46,-15.34 -12.74,-22.89l-466.6 0c14.01,23.95 27.72,48.78 41.09,74.42z" fill="url(#body-fill-${matteId})"/>
+  <path d="M1499.26 4487.21c206.47,377.37 338.07,947.78 338.07,1586.08 0,638.26 -131.58,1208.67 -338.05,1586.04 144.56,220.05 239.52,332.13 533.56,329.36 81.16,-0.78 287.12,-1.96 353.5,-1.96l5986.01 0 467.61 0 209.25 -15.72c342.17,-304.27 583.74,-1044.54 583.74,-1909.4 0,-818.9 -216.56,-1526.05 -530.05,-1857.22l-802.51 0 -5912.48 0c-101.18,-2.53 -269.88,-0.57 -355.07,3.16 -188.43,8.26 -369.17,56.26 -517.34,256.88 -5.44,7.39 -10.85,14.97 -16.24,22.78z" fill="url(#body-fill-${matteId})"/>
+  <path d="M1837.33 6073.29c0,-638.3 -131.6,-1208.71 -338.07,-1586.08 -4.21,-7.71 -8.46,-15.34 -12.74,-22.89l-466.6 0c14.01,23.95 27.72,48.78 41.09,74.42 196.61,377.22 320.94,933.56 320.94,1554.04 0,591.98 -113.18,1125.59 -294.33,1500.95 -10.83,22.45 -21.9,44.31 -33.21,65.6l444.87 0c206.47,-377.37 338.05,-947.78 338.05,-1586.04z" fill="url(#steel-fill-${matteId})"/>
+ </g>
+ <g fill="url(#matte-grain-${matteId})" opacity="0.32">
+  <path d="M906.03 6073.29c0,-610.94 -121.71,-1159.42 -314.7,-1534.55l-1036.27 0c-278.07,0 -505.5,227.46 -505.5,505.49l0 793.14 0 471.84 0 779.04c0,278.03 227.43,505.48 505.46,505.48l1043.48 0c188.82,-374.7 307.53,-917.1 307.53,-1520.44zm-814.02 19.47c0,421.49 66.05,811.21 177.97,1127.68 -65.5,73.29 -160.66,119.61 -266.1,119.61l-296.85 0c-196.39,0 -357.07,-160.66 -357.07,-357.06l0 -1842.76c0,-196.4 160.68,-357.07 357.07,-357.07l296.85 0c114.25,0 216.44,54.38 281.92,138.54 -121.49,323.93 -193.79,730.12 -193.79,1171.06z"/>
+  <path d="M591.33 4538.74c192.99,375.13 314.7,923.61 314.7,1534.55 0,603.34 -118.71,1145.74 -307.53,1520.44l489.12 0c181.15,-375.36 294.33,-908.97 294.33,-1500.95 0,-620.48 -124.33,-1176.82 -320.94,-1554.04l-469.68 0z"/>
+  <path d="M1061.01 4538.74c196.61,377.22 320.94,933.56 320.94,1554.04 0,591.98 -113.18,1125.59 -294.33,1500.95 -10.83,22.45 -21.9,44.31 -33.21,65.6l444.87 0c206.47,-377.37 338.05,-947.78 338.05,-1586.04 0,-638.3 -131.6,-1208.71 -338.07,-1586.08 -4.21,-7.71 -8.46,-15.34 -12.74,-22.89l-466.6 0c14.01,23.95 27.72,48.78 41.09,74.42z"/>
+  <path d="M1499.26 4487.21c206.47,377.37 338.07,947.78 338.07,1586.08 0,638.26 -131.58,1208.67 -338.05,1586.04 144.56,220.05 239.52,332.13 533.56,329.36 81.16,-0.78 287.12,-1.96 353.5,-1.96l5986.01 0 467.61 0 209.25 -15.72c342.17,-304.27 583.74,-1044.54 583.74,-1909.4 0,-818.9 -216.56,-1526.05 -530.05,-1857.22l-802.51 0 -5912.48 0c-101.18,-2.53 -269.88,-0.57 -355.07,3.16 -188.43,8.26 -369.17,56.26 -517.34,256.88 -5.44,7.39 -10.85,14.97 -16.24,22.78z"/>
+ </g>
+ <g fill="none" stroke="#ffffff" stroke-opacity="${whiteStrokeOpacity}" stroke-width="20" stroke-miterlimit="22.9256">
+  <path d="M9102.9 4204.39c313.49,331.17 530.05,1038.32 530.05,1857.22 0,880.15 -250.18,1631.25 -601.98,1925.12"/>
+  <path d="M9570.51 4204.39c313.49,331.16 530.05,1038.32 530.05,1857.22 0,880.16 -241.66,1624 -593.48,1917.87"/>
+  <path d="M1486.52 4464.32c213.79,376.99 350.81,957.63 350.81,1608.97 0,638.26 -131.58,1208.67 -338.05,1586.04"/>
+  <path d="M1019.92 4464.32c220.22,376.28 362.03,965.8 362.03,1628.46 0,627.38 -127.12,1189.2 -327.54,1566.55"/>
+  <path d="M-950.44 6309.21c-4.03,-77.41 -6.12,-156.13 -6.12,-235.92 0,-79.79 2.09,-158.51 6.12,-235.92m1541.77 -1298.63c192.99,375.13 314.7,923.61 314.7,1534.55 0,603.34 -118.71,1145.74 -307.53,1520.44"/>
+  <path d="M269.98 7220.44c-111.92,-316.47 -177.97,-706.19 -177.97,-1127.68 0,-440.94 72.3,-847.13 193.79,-1171.06"/>
+  <path d="M1499.28 4487.21c151.1,-219.82 338.21,-271.1 533.56,-279.66 85.19,-3.73 253.89,-5.69 355.07,-3.16m-1.57 3782.37c-66.38,-0.03 -272.34,1.15 -353.5,1.93 -294.04,2.77 -389,-109.31 -533.56,-329.36"/>
+  <path d="M269.98 7220.44c-65.5,73.29 -160.66,119.61 -266.1,119.61l-296.85 0c-196.39,0 -357.07,-160.66 -357.07,-357.06l0 -1842.76c0,-196.4 160.68,-357.07 357.07,-357.07l296.85 0c114.25,0 216.44,54.38 281.9,138.54"/>
+  <path d="M-444.94 7593.73c-278.07,0 -505.5,-227.45 -505.5,-505.48l0 -2044.02c0,-278.03 227.43,-505.49 505.5,-505.49"/>
+  <line x1="2172.02" y1="7986.73" x2="8372.35" y2="7986.73" />
+  <line x1="2274.89" y1="4204.39" x2="8300.39" y2="4204.39" />
+  <polyline points="8372.35,7986.73 8839.96,7986.73 9049.21,7971.01"/>
+  <line x1="8300.39" y1="4204.39" x2="9102.9" y2="4204.39" />
+  <line x1="-444.98" y1="7593.73" x2="598.5" y2="7593.73" />
+  <line x1="-444.98" y1="4538.74" x2="591.33" y2="4538.74" />
+  <line x1="598.5" y1="7593.73" x2="1087.62" y2="7593.73" />
+  <line x1="591.33" y1="4538.74" x2="1061.01" y2="4538.74" />
+  <line x1="1499.28" y1="7659.33" x2="1054.41" y2="7659.33" />
+  <line x1="1515.36" y1="4464.32" x2="1019.92" y2="4464.32" />
+ </g>
+ <g fill="none" stroke="#000000" stroke-width="20" stroke-miterlimit="22.9256">
+  <line x1="9049.21" y1="7971.01" x2="9515.71" y2="7972.18" />
+  <line x1="9570.51" y1="4204.39" x2="9102.9" y2="4204.39" />
+ </g>
+</svg>`.trim();
+}
+
+function syncBottleTheme(item){
+ if(!item){
+  return;
+ }
+
+ const theme = item.dataset.bottleTheme || "preto";
+ const palette = getBottleTheme(theme);
+ const frameSlot = item.querySelector(".bottle-frame-slot");
+ const colorDot = item.querySelector(".color-dot");
+
+ if(frameSlot){
+  renderBottleFrameInto(frameSlot, theme);
+ }
+
+ if(colorDot){
+  colorDot.style.background = palette.dot;
+  colorDot.style.borderColor = palette.dotBorder;
+ }
+
+ const toggle = item.querySelector(".color-toggle");
+ if(toggle){
+  toggle.setAttribute("aria-label", `Alterar cor. Cor atual: ${palette.label}`);
+ }
+
+ item.querySelectorAll(".color-option").forEach(option=>{
+  const selected = option.dataset.colorKey === palette.key;
+  option.classList.toggle("is-selected", selected);
+  option.setAttribute("aria-pressed", selected ? "true" : "false");
+ });
+}
+
+function syncBottleIcon(item){
+ if(!item){
+  return;
+ }
+
+ const icon = getIconDefinition(item.dataset.iconKey || "");
+ const adjustments = getItemIconAdjustments(item);
+ const toggle = item.querySelector(".icon-toggle");
+ const hasIcon = !!icon;
+
+ if(toggle){
+  toggle.textContent = icon ? `Ícone: ${icon.label}` : "Adicionar ícone";
+  toggle.setAttribute("aria-label", icon ? `Alterar ícone. Atual: ${icon.label}` : "Adicionar ícone");
+ }
+
+ item.querySelectorAll(".icon-option").forEach(option=>{
+  const selected = option.dataset.iconKey === (item.dataset.iconKey || "");
+  option.classList.toggle("is-selected", selected);
+  option.setAttribute("aria-pressed", selected ? "true" : "false");
+ });
+
+ const scaleValue = item.querySelector("[data-icon-scale-value]");
+ const positionValue = item.querySelector("[data-icon-position-value]");
+ const rotationValue = item.querySelector("[data-icon-rotation-value]");
+ const resetButton = item.querySelector(".icon-adjust-reset");
+
+ if(scaleValue){
+  scaleValue.textContent = `${Math.round(adjustments.scale * 100)}%`;
+ }
+
+ if(positionValue){
+  positionValue.textContent = `X ${formatSignedPercent(adjustments.offsetX * 100)} • Y ${formatSignedPercent(adjustments.offsetY * 100)}`;
+ }
+
+ if(rotationValue){
+  rotationValue.textContent = `${Math.round(adjustments.rotation)}°`;
+ }
+
+ if(resetButton){
+  resetButton.disabled = !hasIcon;
+ }
+
+ item.querySelectorAll(".icon-adjust-button").forEach(button=>{
+  button.disabled = !hasIcon;
+ });
+
+ item.querySelectorAll(".icon-adjust-control").forEach(control=>{
+  control.classList.toggle("is-disabled", !hasIcon);
+ });
+}
+
+function closePickerMenus(exceptItem = null){
+ document.querySelectorAll(".item.color-menu-open").forEach(item=>{
+  if(item !== exceptItem){
+   item.classList.remove("color-menu-open");
+  }
+ });
+
+ document.querySelectorAll(".item.icon-menu-open").forEach(item=>{
+  if(item !== exceptItem){
+   item.classList.remove("icon-menu-open");
+  }
+ });
+
+ document.querySelectorAll(".item").forEach(item=>{
+  if(item !== exceptItem){
+   const colorToggle = item.querySelector(".color-toggle");
+   const iconToggle = item.querySelector(".icon-toggle");
+
+   if(colorToggle){
+    colorToggle.setAttribute("aria-expanded", "false");
+   }
+
+   if(iconToggle){
+    iconToggle.setAttribute("aria-expanded", "false");
+   }
+  }
+ });
+}
+
+function closeColorMenus(exceptItem = null){
+ closePickerMenus(exceptItem);
+}
+
+function toggleColorMenu(control){
+ const item = control.closest(".item");
+ if(!item){
+  return;
+ }
+
+ const isOpen = item.classList.contains("color-menu-open");
+ closePickerMenus(item);
+ item.classList.remove("icon-menu-open");
+ const iconToggle = item.querySelector(".icon-toggle");
+ if(iconToggle){
+  iconToggle.setAttribute("aria-expanded", "false");
+ }
+ item.classList.toggle("color-menu-open", !isOpen);
+ control.setAttribute("aria-expanded", isOpen ? "false" : "true");
+}
+
+function toggleIconMenu(control){
+ const item = control.closest(".item");
+ if(!item){
+  return;
+ }
+
+ const isOpen = item.classList.contains("icon-menu-open");
+ closePickerMenus(item);
+ item.classList.remove("color-menu-open");
+ const colorToggle = item.querySelector(".color-toggle");
+ if(colorToggle){
+  colorToggle.setAttribute("aria-expanded", "false");
+ }
+ item.classList.toggle("icon-menu-open", !isOpen);
+ control.setAttribute("aria-expanded", isOpen ? "false" : "true");
+}
+
+async function selectBottleColor(control, theme){
+ const item = control.closest(".item");
+ if(!item){
+  return;
+ }
+
+ item.dataset.bottleTheme = theme;
+ syncBottleTheme(item);
+
+ const preview = item.querySelector(".preview-svg");
+ if(preview){
+  await drawPreviewSvg(preview);
+ }
+
+ item.classList.remove("color-menu-open");
+ const toggle = item.querySelector(".color-toggle");
+ if(toggle){
+  toggle.setAttribute("aria-expanded", "false");
+ }
+}
+
+async function selectBottleIcon(control, iconKey){
+ const item = control.closest(".item");
+ if(!item){
+  return;
+ }
+
+ const previousIconKey = item.dataset.iconKey || "";
+ item.dataset.iconKey = iconKey;
+
+ if(previousIconKey !== iconKey){
+  resetItemIconAdjustments(item);
+ }
+
+ syncBottleIcon(item);
+
+  const preview = item.querySelector(".preview-svg");
+  if(preview){
+  await drawPreviewSvg(preview);
+ }
+
+ const toggle = item.querySelector(".icon-toggle");
+ if(toggle){
+  toggle.setAttribute("aria-expanded", "true");
+ }
+
+ item.classList.add("icon-menu-open");
+}
+
+async function redrawItemPreview(item){
+ const preview = item?.querySelector(".preview-svg");
+ if(preview){
+  await drawPreviewSvg(preview);
+ }
+}
+
+async function stepBottleIconScale(control, delta){
+ const item = control.closest(".item");
+ if(!item || !(item.dataset.iconKey || "")){
+  return;
+ }
+
+ const current = getItemIconAdjustments(item);
+ setItemIconAdjustments(item, {
+  scale:current.scale + parseFiniteNumber(delta, 0)
+ });
+ syncBottleIcon(item);
+ await redrawItemPreview(item);
+}
+
+async function stepBottleIconOffset(control, axis, delta){
+ const item = control.closest(".item");
+ if(!item || !(item.dataset.iconKey || "")){
+  return;
+ }
+
+ const current = getItemIconAdjustments(item);
+ const nextValue = (axis === "x" ? current.offsetX : current.offsetY) + parseFiniteNumber(delta, 0);
+
+ if(axis === "x"){
+  setItemIconAdjustments(item, { offsetX:nextValue });
+ }else{
+  setItemIconAdjustments(item, { offsetY:nextValue });
+ }
+
+ syncBottleIcon(item);
+ await redrawItemPreview(item);
+}
+
+async function resetBottleIconPosition(control){
+ const item = control.closest(".item");
+ if(!item || !(item.dataset.iconKey || "")){
+  return;
+ }
+
+ setItemIconAdjustments(item, {
+  offsetX:0,
+  offsetY:0
+ });
+ syncBottleIcon(item);
+ await redrawItemPreview(item);
+}
+
+async function stepBottleIconRotation(control, delta){
+ const item = control.closest(".item");
+ if(!item || !(item.dataset.iconKey || "")){
+  return;
+ }
+
+ const current = getItemIconAdjustments(item);
+ setItemIconAdjustments(item, {
+  rotation:current.rotation + parseFiniteNumber(delta, 0)
+ });
+ syncBottleIcon(item);
+ await redrawItemPreview(item);
+}
+
+async function resetBottleIconAdjustments(control){
+ const item = control.closest(".item");
+ if(!item || !(item.dataset.iconKey || "")){
+  return;
+ }
+
+ resetItemIconAdjustments(item);
+ syncBottleIcon(item);
+ await redrawItemPreview(item);
+}
+
+function isCursive(font){
+ return font.toLowerCase().includes("script") ||
+        font.toLowerCase().includes("vibes") ||
+        font.toLowerCase().includes("brush") ||
+        font.toLowerCase().includes("autography") ||
+        font.toLowerCase().includes("honey") ||
+        font.toLowerCase().includes("swash") ||
+        font.toLowerCase().includes("nickainley");
+}
+
+function fitOpenTypeSize(fontObject, text, maxWidth, maxHeight, options = {}){
+ const minSize = options.minSize || 18;
+ const maxSize = options.maxSize || 280;
+ let low = minSize;
+ let high = maxSize;
+ let bestPath = fontObject.getPath(text, 0, 0, minSize, { kerning:true });
+ let bestBox = bestPath.getBoundingBox();
+ let bestSize = minSize;
+
+ while(low <= high){
+  const size = Math.floor((low + high) / 2);
+  const path = fontObject.getPath(text, 0, 0, size, { kerning:true });
+  const box = path.getBoundingBox();
+  const currentWidth = box.x2 - box.x1;
+  const currentHeight = box.y2 - box.y1;
+
+  if(currentWidth <= maxWidth && currentHeight <= maxHeight){
+   bestPath = path;
+   bestBox = box;
+   bestSize = size;
+   low = size + 1;
+  }else{
+   high = size - 1;
+  }
+ }
+
+ return { size:bestSize, box:bestBox, path:bestPath };
+}
+
+function getIconLayoutMetrics(icon, referenceHeight, iconOptions = {}){
+ if(!icon){
+  return {
+   width:0,
+   height:0,
+   gap:0,
+   offsetX:0,
+   offsetY:0
+  };
+ }
+
+ const scale = clamp(parseFiniteNumber(iconOptions.scale, 1), ICON_SCALE_MIN, ICON_SCALE_MAX);
+ const offsetX = referenceHeight * clamp(parseFiniteNumber(iconOptions.offsetX, 0), -0.9, 0.9);
+ const offsetY = referenceHeight * clamp(parseFiniteNumber(iconOptions.offsetY, 0), -0.65, 0.65);
+ const iconHeight = Math.max(referenceHeight * 0.88 * scale, 18 * scale);
+ const iconWidth = iconHeight * (icon.width / icon.height);
+ const gap = Math.max(referenceHeight * 0.016, 3);
+
+ return {
+  width:iconWidth,
+  height:iconHeight,
+  gap,
+  offsetX,
+  offsetY
+ };
+}
+
+function buildTextIconLayout(box, icon, iconOptions = {}){
+ const textWidth = box.x2 - box.x1;
+ const textHeight = box.y2 - box.y1;
+
+ if(!icon){
+  return {
+   box,
+   textWidth,
+   textHeight,
+   iconWidth:0,
+   iconHeight:0,
+   iconGap:0,
+   iconLeft:box.x2,
+   iconTop:(box.y1 + box.y2) / 2,
+   minX:box.x1,
+   minY:box.y1,
+   maxX:box.x2,
+   maxY:box.y2,
+   combinedWidth:textWidth,
+   combinedHeight:textHeight
+  };
+ }
+
+ const iconLayout = getIconLayoutMetrics(icon, textHeight, iconOptions);
+ const textCenterY = (box.y1 + box.y2) / 2;
+ const iconLeft = box.x2 + iconLayout.gap + iconLayout.offsetX;
+ const iconTop = textCenterY - (iconLayout.height / 2) + iconLayout.offsetY;
+ const minX = Math.min(box.x1, iconLeft);
+ const minY = Math.min(box.y1, iconTop);
+ const maxX = Math.max(box.x2, iconLeft + iconLayout.width);
+ const maxY = Math.max(box.y2, iconTop + iconLayout.height);
+
+ return {
+  box,
+  textWidth,
+  textHeight,
+  iconWidth:iconLayout.width,
+  iconHeight:iconLayout.height,
+  iconGap:iconLayout.gap,
+  iconLeft,
+  iconTop,
+  minX,
+  minY,
+  maxX,
+  maxY,
+  combinedWidth:maxX - minX,
+  combinedHeight:maxY - minY
+ };
+}
+
+function fitOpenTypeComposite(fontObject, text, icon, maxWidth, maxHeight, options = {}, iconOptions = {}){
+ const minSize = Math.max(14, Math.floor((options.minSize || 18) * 0.72));
+ const maxSize = options.maxSize || 280;
+ let low = minSize;
+ let high = maxSize;
+ let best = null;
+
+ while(low <= high){
+  const size = Math.floor((low + high) / 2);
+  const path = fontObject.getPath(text, 0, 0, size, { kerning:true });
+  const box = path.getBoundingBox();
+  const layout = buildTextIconLayout(box, icon, iconOptions);
+
+  if(layout.combinedWidth <= maxWidth && layout.combinedHeight <= maxHeight){
+   best = {
+    size,
+    box,
+    textWidth:layout.textWidth,
+    textHeight:layout.textHeight,
+    iconWidth:layout.iconWidth,
+    iconHeight:layout.iconHeight,
+    iconGap:layout.iconGap,
+    combinedWidth:layout.combinedWidth,
+    combinedHeight:layout.combinedHeight,
+    layout
+   };
+   low = size + 1;
+  }else{
+   high = size - 1;
+  }
+ }
+
+ if(best){
+  return best;
+ }
+
+ const fallback = fitOpenTypeSize(fontObject, text, maxWidth, maxHeight, options);
+ const fallbackLayout = buildTextIconLayout(fallback.box, null);
+ return {
+  size:fallback.size,
+  box:fallback.box,
+  textWidth:fallbackLayout.textWidth,
+  textHeight:fallbackLayout.textHeight,
+  iconWidth:0,
+  iconHeight:0,
+  iconGap:0,
+  combinedWidth:fallbackLayout.combinedWidth,
+  combinedHeight:fallbackLayout.combinedHeight,
+  layout:fallbackLayout
+ };
+}
+
+function buildOpenTypePath(fontObject, text, width, height, widthRatio = PREVIEW_PATH_WIDTH_RATIO, heightRatio = PREVIEW_PATH_HEIGHT_RATIO, options = {}){
+ const fit = fitOpenTypeSize(fontObject, text, width * widthRatio, height * heightRatio, options);
+ const x = (width / 2) - ((fit.box.x1 + fit.box.x2) / 2);
+ const y = (height / 2) - ((fit.box.y1 + fit.box.y2) / 2);
+
+ return fontObject.getPath(text, x, y, fit.size, { kerning:true });
+}
+
+function escapeXml(value){
+ return String(value)
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;")
+  .replace(/'/g, "&apos;");
+}
+
+function pathToSvgData(path){
+ return path.commands.map(command=>{
+  if(command.type === "M"){
+   return `M ${command.x} ${command.y}`;
+  }
+
+  if(command.type === "L"){
+   return `L ${command.x} ${command.y}`;
+  }
+
+  if(command.type === "C"){
+   return `C ${command.x1} ${command.y1} ${command.x2} ${command.y2} ${command.x} ${command.y}`;
+  }
+
+  if(command.type === "Q"){
+   return `Q ${command.x1} ${command.y1} ${command.x} ${command.y}`;
+  }
+
+  if(command.type === "Z"){
+   return "Z";
+  }
+
+  return "";
+ }).join(" ");
+}
+
+function fitSvgTextSize(text, fontFamily, maxWidth, maxHeight, options = {}){
+ const canvas = getMeasureCanvas();
+ const ctx = canvas.getContext("2d");
+ const minSize = options.minSize || 24;
+ const maxSize = options.maxSize || 280;
+ let low = minSize;
+ let high = maxSize;
+ let bestSize = minSize;
+
+ while(low <= high){
+  const size = Math.floor((low + high) / 2);
+  ctx.font = `600 ${size}px "${fontFamily}"`;
+  const metrics = ctx.measureText(text);
+  const measuredHeight = Math.max(
+   (metrics.actualBoundingBoxAscent || size * 0.7) + (metrics.actualBoundingBoxDescent || size * 0.25),
+   size * 0.82
+  );
+
+  if(metrics.width <= maxWidth && measuredHeight <= maxHeight){
+   bestSize = size;
+   low = size + 1;
+  }else{
+   high = size - 1;
+  }
+ }
+
+ return bestSize;
+}
+
+function measureSvgTextBounds(text, fontFamily, fontSize, width, height){
+ const canvas = getMeasureCanvas();
+ const ctx = canvas.getContext("2d");
+ ctx.font = `600 ${fontSize}px "${fontFamily}"`;
+ const metrics = ctx.measureText(text);
+ const textHeight = Math.max(
+  (metrics.actualBoundingBoxAscent || fontSize * 0.7) + (metrics.actualBoundingBoxDescent || fontSize * 0.25),
+  fontSize * 0.82
+ );
+ const textWidth = metrics.width;
+ const x1 = (width - textWidth) / 2;
+ const y1 = (height - textHeight) / 2;
+
+ return {
+  x1,
+  y1,
+  x2:x1 + textWidth,
+  y2:y1 + textHeight,
+  width:textWidth,
+  height:textHeight
+ };
+}
+
+function getStandaloneIconPlacement(icon, width, height, textBounds = null, iconOptions = {}){
+ if(!icon){
+  return {
+   x:0,
+   y:0,
+   width:0,
+   height:0
+  };
+ }
+
+ const scale = clamp(parseFiniteNumber(iconOptions.scale, 1), ICON_SCALE_MIN, ICON_SCALE_MAX);
+ const normalizedX = clamp(parseFiniteNumber(iconOptions.offsetX, 0), ICON_OFFSET_X_MIN, ICON_OFFSET_X_MAX);
+ const normalizedY = clamp(parseFiniteNumber(iconOptions.offsetY, 0), ICON_OFFSET_Y_MIN, ICON_OFFSET_Y_MAX);
+ const baseIconHeight = Math.max(height * ICON_BASE_HEIGHT_RATIO, 24);
+ const iconHeight = baseIconHeight * scale;
+ const iconWidth = iconHeight * (icon.width / icon.height);
+ const textCenterY = textBounds ? ((textBounds.y1 + textBounds.y2) / 2) : (height / 2);
+ const gap = Math.max(width * 0.014, 8);
+ const baseLeft = textBounds
+  ? textBounds.x2 + gap
+  : ((width * 0.72) - (iconWidth / 2));
+ const baseTop = textCenterY - (iconHeight / 2);
+ const travelX = width * ICON_TRAVEL_X_RATIO * normalizedX;
+ const travelY = height * ICON_TRAVEL_Y_RATIO * normalizedY;
+ const paddingX = Math.max(width * 0.015, 6);
+ const paddingY = Math.max(height * 0.04, 4);
+ const maxLeft = Math.max(paddingX, width - paddingX - iconWidth);
+ const maxTop = Math.max(paddingY, height - paddingY - iconHeight);
+
+ return {
+  x:clamp(baseLeft + travelX, paddingX, maxLeft),
+  y:clamp(baseTop + travelY, paddingY, maxTop),
+  width:iconWidth,
+  height:iconHeight
+ };
+}
+
+function fitSvgTextComposite(text, fontFamily, icon, maxWidth, maxHeight, options = {}, iconOptions = {}){
+ const canvas = getMeasureCanvas();
+ const ctx = canvas.getContext("2d");
+ const minSize = Math.max(14, Math.floor((options.minSize || 24) * 0.72));
+ const maxSize = options.maxSize || 280;
+ let low = minSize;
+ let high = maxSize;
+ let best = null;
+
+ while(low <= high){
+  const size = Math.floor((low + high) / 2);
+  ctx.font = `600 ${size}px "${fontFamily}"`;
+  const metrics = ctx.measureText(text);
+  const textHeight = Math.max(
+   (metrics.actualBoundingBoxAscent || size * 0.7) + (metrics.actualBoundingBoxDescent || size * 0.25),
+   size * 0.82
+  );
+  const layout = buildTextIconLayout({
+   x1:0,
+   x2:metrics.width,
+   y1:-(textHeight / 2),
+   y2:textHeight / 2
+  }, icon, iconOptions);
+
+  if(layout.combinedWidth <= maxWidth && layout.combinedHeight <= maxHeight){
+   best = {
+    size,
+    textWidth:layout.textWidth,
+    textHeight:layout.textHeight,
+    iconWidth:layout.iconWidth,
+    iconHeight:layout.iconHeight,
+    iconGap:layout.iconGap,
+    combinedWidth:layout.combinedWidth,
+    combinedHeight:layout.combinedHeight,
+    layout
+   };
+   low = size + 1;
+  }else{
+   high = size - 1;
+  }
+ }
+
+ if(best){
+  return best;
+ }
+
+ const size = fitSvgTextSize(text, fontFamily, maxWidth, maxHeight, options);
+ ctx.font = `600 ${size}px "${fontFamily}"`;
+ const metrics = ctx.measureText(text);
+ const textHeight = Math.max(
+  (metrics.actualBoundingBoxAscent || size * 0.7) + (metrics.actualBoundingBoxDescent || size * 0.25),
+  size * 0.82
+ );
+ const layout = buildTextIconLayout({
+  x1:0,
+  x2:metrics.width,
+  y1:-(textHeight / 2),
+  y2:textHeight / 2
+ }, null);
+
+ return {
+  size,
+  textWidth:layout.textWidth,
+  textHeight:layout.textHeight,
+  iconWidth:0,
+  iconHeight:0,
+  iconGap:0,
+  combinedWidth:layout.combinedWidth,
+  combinedHeight:layout.combinedHeight,
+  layout
+ };
+}
+
+function buildMetallicSilverDefs(id){
+ return `
+<defs>
+ <linearGradient id="${id}" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#fdfdfd"/>
+  <stop offset="16%" stop-color="#d6d7da"/>
+  <stop offset="34%" stop-color="#ffffff"/>
+  <stop offset="52%" stop-color="#a7a9ac"/>
+  <stop offset="74%" stop-color="#eef0f2"/>
+  <stop offset="100%" stop-color="#7f8387"/>
+ </linearGradient>
+</defs>`.trim();
+}
+
+function buildMetallicSteelDarkDefs(id){
+ return `
+<defs>
+ <linearGradient id="${id}" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#f1f4f6"/>
+  <stop offset="14%" stop-color="#9aa1a8"/>
+  <stop offset="32%" stop-color="#4b5258"/>
+  <stop offset="52%" stop-color="#d7dde1"/>
+  <stop offset="72%" stop-color="#5b6269"/>
+  <stop offset="100%" stop-color="#262b30"/>
+ </linearGradient>
+</defs>`.trim();
+}
+
+function resolveSvgFill(fill){
+ if(fill === "metallic-silver"){
+  const gradientId = `metallic-silver-${Math.random().toString(36).slice(2,10)}`;
+  return {
+   fill:`url(#${gradientId})`,
+   defs:buildMetallicSilverDefs(gradientId),
+   extraAttrs:'stroke="#ffffff" stroke-opacity="0.08" stroke-width="0.8" paint-order="stroke fill"'
+  };
+ }
+
+ if(fill === "metallic-steel-dark"){
+  const gradientId = `metallic-steel-dark-${Math.random().toString(36).slice(2,10)}`;
+  return {
+   fill:`url(#${gradientId})`,
+   defs:buildMetallicSteelDarkDefs(gradientId),
+   extraAttrs:'stroke="#f7f9fa" stroke-opacity="0.24" stroke-width="1.2" paint-order="stroke fill"'
+  };
+ }
+
+ return { fill, defs:"", extraAttrs:"" };
+}
+
+async function buildSvgMarkup(font, text, width = 1600, height = 260, fill = "metallic-silver", iconKey = "", iconOptions = {}){
+ const fillConfig = resolveSvgFill(fill);
+ const previewFit = getPreviewFitConfig(text);
+ const icon = getIconDefinition(iconKey);
+
+ if(font.isLocal){
+  const fontObject = await getOpenTypeFont(font);
+  if(fontObject){
+   return await buildOutlinedSvgMarkup(
+    fontObject,
+    text,
+    width,
+    height,
+    true,
+    previewFit.widthRatio,
+    previewFit.heightRatio,
+    fill,
+    "",
+    previewFit,
+    icon,
+    iconOptions
+   );
+  }
+ }
+
+ const fontSize = fitSvgTextSize(
+  text,
+  font.cssFamily,
+  width * previewFit.widthRatio,
+  height * previewFit.heightRatio,
+  previewFit
+ );
+ const textBounds = measureSvgTextBounds(text, font.cssFamily, fontSize, width, height);
+ const iconPlacement = getStandaloneIconPlacement(icon, width, height, textBounds, iconOptions);
+
+ return `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block">
+ ${fillConfig.defs}
+ <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="${escapeXml(font.cssFamily)}" font-size="${fontSize}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}>${escapeXml(text)}</text>
+ ${buildPositionedIconMarkup(icon, iconPlacement.x, iconPlacement.y, iconPlacement.height, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation)}
+</svg>`.trim();
+}
+
+function buildPositionedIconMarkup(icon, x, y, iconHeight, paint, extraAttrs = "", rotation = 0){
+ if(!icon || !iconHeight){
+  return "";
+ }
+
+ const iconWidth = iconHeight * (icon.width / icon.height);
+ const viewBoxParts = String(icon.viewBox || INLINE_ICON_VIEWBOX).split(/\s+/).map(Number);
+ const viewBoxWidth = viewBoxParts[2] || 1;
+ const viewBoxHeight = viewBoxParts[3] || 1;
+
+ if(icon.kind === "svg" && icon.markup){
+  const scale = Math.min(iconWidth / viewBoxWidth, iconHeight / viewBoxHeight);
+  const scaledWidth = viewBoxWidth * scale;
+  const scaledHeight = viewBoxHeight * scale;
+  const offsetX = x + ((iconWidth - scaledWidth) / 2);
+  const offsetY = y + ((iconHeight - scaledHeight) / 2);
+  const normalizedRotation = parseFiniteNumber(rotation, 0);
+  const localCenterX = scaledWidth / 2;
+  const localCenterY = scaledHeight / 2;
+  const rotationOpen = normalizedRotation
+   ? `<g transform="rotate(${normalizedRotation} ${localCenterX} ${localCenterY})">`
+   : "";
+  const rotationClose = normalizedRotation ? `</g>` : "";
+
+  return `
+<g transform="translate(${offsetX} ${offsetY})" fill="${paint}" fill-rule="evenodd" clip-rule="evenodd" ${extraAttrs}>${rotationOpen}<g transform="scale(${scale})">${icon.markup}</g>${rotationClose}</g>`.trim();
+ }
+
+ return "";
+}
+
+async function buildOutlinedSvgMarkup(fontObject, text, width, height, responsive = false, widthRatio = PREVIEW_PATH_WIDTH_RATIO, heightRatio = PREVIEW_PATH_HEIGHT_RATIO, fill = "#000000", defs = "", options = {}, icon = null, iconOptions = {}){
+ const fillConfig = resolveSvgFill(fill);
+ const sizeAttrs = responsive
+  ? `preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block"`
+  : `width="${width}" height="${height}" preserveAspectRatio="xMidYMid meet"`;
+
+ if(!icon){
+  const path = buildOpenTypePath(fontObject, text, width, height, widthRatio, heightRatio, options);
+  const svgPath = pathToSvgData(path);
+  return `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" ${sizeAttrs}>
+ ${defs || fillConfig.defs}
+ <path d="${svgPath}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}/>
+</svg>`.trim();
+ }
+
+ const fit = fitOpenTypeSize(fontObject, text, width * widthRatio, height * heightRatio, options);
+ const textX = (width / 2) - ((fit.box.x1 + fit.box.x2) / 2);
+ const textY = (height / 2) - ((fit.box.y1 + fit.box.y2) / 2);
+ const textPath = fontObject.getPath(text, textX, textY, fit.size, { kerning:true });
+ const textBounds = textPath.getBoundingBox();
+ const iconPlacement = getStandaloneIconPlacement(icon, width, height, textBounds, iconOptions);
+
+ return `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" ${sizeAttrs}>
+ ${defs || fillConfig.defs}
+ <path d="${pathToSvgData(textPath)}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}/>
+ ${buildPositionedIconMarkup(icon, iconPlacement.x, iconPlacement.y, iconPlacement.height, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation)}
+</svg>`.trim();
+}
+
+async function buildOutlinedExportSvg(font, text, width = EXPORT_WIDTH, height = EXPORT_HEIGHT, iconKey = "", iconOptions = {}){
+ if(!font.isLocal){
+  throw new Error("Essa fonte não possui arquivo local para vetorização.");
+ }
+
+ const fontObject = await getOpenTypeFont(font);
+ if(!fontObject){
+  throw new Error(`Não foi possível vetorizar a fonte ${font.label}.`);
+ }
+
+ const icon = getIconDefinition(iconKey);
+ return await buildOutlinedSvgMarkup(fontObject, text, width, height, false, EXPORT_PATH_WIDTH_RATIO, EXPORT_PATH_HEIGHT_RATIO, "#000000", "", {}, icon, iconOptions);
+}
+
+async function buildOutlinedExportPdf(font, text, width = EXPORT_WIDTH, height = EXPORT_HEIGHT, iconKey = "", iconOptions = {}){
+ if(!font.isLocal){
+  throw new Error("Essa fonte não possui arquivo local para vetorização.");
+ }
+
+ const fontObject = await getOpenTypeFont(font);
+ if(!fontObject){
+  throw new Error(`Não foi possível vetorizar a fonte ${font.label}.`);
+ }
+
+ const icon = getIconDefinition(iconKey);
+ const svgMarkup = await buildOutlinedSvgMarkup(fontObject, text, width, height, false, EXPORT_PATH_WIDTH_RATIO, EXPORT_PATH_HEIGHT_RATIO, "#000000", "", {}, icon, iconOptions);
+ const parser = new DOMParser();
+ const svgDoc = parser.parseFromString(svgMarkup, "image/svg+xml");
+ const svgElement = svgDoc.documentElement;
+
+ svgElement.setAttribute("width", String(width));
+ svgElement.setAttribute("height", String(height));
+ svgElement.style.background = "transparent";
+
+ const { jsPDF } = window.jspdf;
+ const pdf = new jsPDF({
+  orientation:"landscape",
+  unit:"px",
+  format:[width, height],
+  compress:true
+ });
+
+ if(typeof pdf.svg !== "function"){
+  throw new Error("A biblioteca de exportação PDF não carregou.");
+ }
+
+ await pdf.svg(svgElement, {
+  x:0,
+  y:0,
+  width,
+  height
+ });
+
+ return pdf.output("blob");
+}
+
+async function drawPreviewSvg(container){
+ const font = fontMap.get(container.dataset.fontId);
+ const text = getCurrentName();
+ const item = container.closest(".item");
+ const theme = item ? (item.dataset.bottleTheme || "preto") : "preto";
+ const iconKey = item ? (item.dataset.iconKey || "") : "";
+ const iconOptions = item ? getItemIconAdjustments(item) : getDefaultIconAdjustments();
+ const previewFill = getBottleTheme(theme).previewFill;
+
+ if(!font){
+  return;
+ }
+
+ container.innerHTML = await buildSvgMarkup(font, text, 1400, 180, previewFill, iconKey, iconOptions);
+}
+
+async function updateAll(){
+ const items = Array.from(document.querySelectorAll(".preview-svg"));
+ await Promise.all(items.map(drawPreviewSvg));
+}
+
+function scrollToSuggestions(){
+ document.getElementById("suggestions").scrollIntoView({
+  behavior:"smooth"
+ });
+}
+
+function getCurrentName(){
+ return document.getElementById("nameInput").value || "UltraCell";
+}
+
+async function ensureFontLoaded(font, size = 48){
+ if(font.isLocal || !document.fonts || !document.fonts.load){
+  return;
+ }
+
+ try{
+  await document.fonts.load(`${size}px "${font.cssFamily}"`);
+ }catch(error){
+  console.error(error);
+ }
+}
+
+async function isFontAvailable(font){
+ if(font.isLocal){
+  return !!(await getOpenTypeFont(font));
+ }
+
+ if(!document.fonts || !document.fonts.check){
+  return true;
+ }
+
+ return document.fonts.check(`48px "${font.cssFamily}"`);
+}
+
+function getStatusText(font, available){
+ if(available){
+  return font.isLocal ? "arquivo carregado" : "carregada";
+ }
+
+ if(font.isLocal){
+  return `não carregou: ${font.files.join(", ")}`;
+ }
+
+ return "verifique internet";
+}
+
+function downloadBlob(blob,filename){
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement("a");
+ a.href = url;
+ a.download = filename;
+ a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function isAppleMobile(){
+ const ua = navigator.userAgent || "";
+ const touchMac = navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+ return /iPhone|iPad|iPod/i.test(ua) || touchMac;
+}
+
+function buildWhatsAppText(font, name, icon){
+ const iconText = icon ? ` com ícone ${icon.label}` : "";
+ return `Fonte escolhida: ${font.label} para o nome ${name}${iconText}. PDF vetorial em curvas, pronto para abrir no Corel.`;
+}
+
+function openWhatsAppWithMessage(text){
+ window.open("https://wa.me/?text="+encodeURIComponent(text));
+}
+
+function buildShareFile(blob, fileName, mimeType){
+ return new File([blob], fileName, { type:mimeType });
+}
+
+async function shareFileOnAppleMobile(file){
+ if(!navigator.share){
+  return { ok:false, reason:"unsupported" };
+ }
+
+ const shareData = { files:[file] };
+ const canShareFiles = !navigator.canShare || navigator.canShare(shareData);
+
+ if(!canShareFiles){
+  return { ok:false, reason:"unsupported" };
+ }
+
+ try{
+  await navigator.share(shareData);
+  return { ok:true };
+ }catch(error){
+  const message = String((error && error.message) || "");
+  const isAbort = error && (error.name === "AbortError" || /abort|cancel/i.test(message));
+
+  if(isAbort){
+   return { ok:false, reason:"cancelled" };
+  }
+
+  return { ok:false, reason:"failed", error };
+ }
+}
+
+let noticeTimer = null;
+
+function showNotice(message){
+ const notice = document.getElementById("notice");
+ if(!notice){
+  return;
+ }
+
+ notice.textContent = message;
+ notice.classList.add("show");
+
+ if(noticeTimer){
+  clearTimeout(noticeTimer);
+ }
+
+ noticeTimer = setTimeout(()=>{
+  notice.classList.remove("show");
+ }, 5000);
+}
+
+async function enviarWhats(control, fontId){
+ try{
+  const font = fontMap.get(fontId);
+  if(!font){
+   return;
+  }
+
+  const item = control && control.closest
+   ? control.closest(".item")
+   : document.querySelector(`.preview-svg[data-font-id="${fontId}"]`)?.closest(".item");
+  const name = getCurrentName();
+  const iconKey = item ? (item.dataset.iconKey || "") : "";
+  const iconOptions = item ? getItemIconAdjustments(item) : getDefaultIconAdjustments();
+  const icon = getIconDefinition(iconKey);
+  const pdfBlob = await buildOutlinedExportPdf(font, name, EXPORT_WIDTH, EXPORT_HEIGHT, iconKey, iconOptions);
+  const fileName = `${name} - ${font.label}.pdf`;
+  const pdfFile = buildShareFile(pdfBlob, fileName, "application/pdf");
+  const text = buildWhatsAppText(font, name, icon);
+
+  if(isAppleMobile()){
+   const result = await shareFileOnAppleMobile(pdfFile);
+
+   if(result.ok){
+    return;
+   }
+
+   if(result.reason === "cancelled"){
+    return;
+   }
+
+   downloadBlob(pdfBlob, fileName);
+   showNotice("O iPhone não compartilhou o arquivo direto. O PDF foi baixado para anexar manualmente no WhatsApp.");
+   return;
+  }
+
+  if(navigator.share){
+   const shareData = {
+    title:`${name} - ${font.label}`,
+    text,
+    files:[pdfFile]
+   };
+
+   const canShareFiles = !navigator.canShare || navigator.canShare(shareData);
+
+   if(canShareFiles){
+    try{
+     await navigator.share(shareData);
+     return;
+    }catch(error){
+     const message = String((error && error.message) || "");
+     const isAbort = error && (error.name === "AbortError" || /abort|cancel/i.test(message));
+     const isFileIssue = error && (error.name === "NotAllowedError" || error.name === "TypeError");
+
+     if(isAbort){
+      return;
+     }
+
+     if(isFileIssue){
+      downloadBlob(pdfBlob, fileName);
+      showNotice("O arquivo PDF foi baixado. Agora anexe no WhatsApp como documento.");
+      openWhatsAppWithMessage(`${text} O PDF foi baixado para você anexar no WhatsApp.`);
+      return;
+     }
+
+     throw error;
+    }
+   }
+  }
+
+  downloadBlob(pdfBlob, fileName);
+  showNotice("O arquivo PDF foi baixado. Agora anexe no WhatsApp como documento.");
+  openWhatsAppWithMessage(`${text} O PDF foi baixado para você anexar no WhatsApp.`);
+ }catch(error){
+  console.error(error);
+  alert(error && error.message ? error.message : "Não foi possível preparar o PDF vetorial para compartilhamento no WhatsApp.");
+ }
+}
+
+window.onload = async ()=>{
+ mountLocalFontFaces();
+ renderWatermark();
+ create();
+
+ await Promise.all(allFonts.map(font=>ensureFontLoaded(font)));
+
+ await updateAll();
+};
+
+document.addEventListener("click", event=>{
+ if(!event.target.closest(".picker-shell")){
+  closePickerMenus();
+ }
+});
+
+document.addEventListener("keydown", event=>{
+ if(event.key === "Escape"){
+  closePickerMenus();
+ }
+});
+
+window.addEventListener("resize", ()=>{
+ renderWatermark();
+ updateAll();
+});
+</script>
+
+</body>
+</html>
