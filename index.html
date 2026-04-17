@@ -2489,7 +2489,9 @@ function getIconLayoutMetrics(icon, referenceHeight, iconOptions = {}){
  const scale = clamp(parseFiniteNumber(iconOptions.scale, 1), ICON_SCALE_MIN, ICON_SCALE_MAX);
  const offsetX = referenceHeight * clamp(parseFiniteNumber(iconOptions.offsetX, 0), -0.9, 0.9);
  const offsetY = referenceHeight * clamp(parseFiniteNumber(iconOptions.offsetY, 0), -0.65, 0.65);
- const iconHeight = Math.max(referenceHeight * 0.88 * scale, 18 * scale);
+ const baseIconHeight = Math.max(referenceHeight * NORMAL_ICON_TEXT_HEIGHT_RATIO, 18);
+ const maxIconHeight = Math.max(referenceHeight * 1.42, 22);
+ const iconHeight = clamp(baseIconHeight * scale, 18, maxIconHeight);
  const iconWidth = iconHeight * (metrics.width / metrics.height);
  const gap = Math.max(referenceHeight * 0.016, 3);
 
@@ -2715,12 +2717,16 @@ function getStandaloneIconPlacement(icon, width, height, textBounds = null, icon
  const normalizedY = clamp(parseFiniteNumber(iconOptions.offsetY, 0), ICON_OFFSET_Y_MIN, ICON_OFFSET_Y_MAX);
  const iconAspectRatio = metrics.width / metrics.height;
  const textHeight = textBounds ? Math.max(textBounds.height, height * 0.28) : (height * 0.42);
- const baseIconHeight = Math.max(textHeight * NORMAL_ICON_TEXT_HEIGHT_RATIO, height * (ICON_BASE_HEIGHT_RATIO * 0.72), 20);
+ const baseIconHeight = clamp(
+  textHeight * NORMAL_ICON_TEXT_HEIGHT_RATIO,
+  height * (ICON_BASE_HEIGHT_RATIO * 0.62),
+  height * 0.56
+ );
  const paddingX = Math.max(width * 0.012, 4);
  const paddingY = Math.max(height * 0.045, 4);
  const maxIconHeightByWidth = Math.max(((width - (paddingX * 2)) / Math.max(iconAspectRatio, 0.0001)), 24);
  const maxIconHeight = Math.max(Math.min(height - (paddingY * 2), maxIconHeightByWidth), 24);
- const iconHeight = Math.min(baseIconHeight * scale, maxIconHeight);
+ const iconHeight = clamp(baseIconHeight * scale, 20, maxIconHeight);
  const iconWidth = iconHeight * iconAspectRatio;
  const textCenterY = textBounds ? ((textBounds.y1 + textBounds.y2) / 2) : (height / 2);
  const gap = Math.max(textHeight * NORMAL_ICON_GAP_RATIO, 8);
@@ -2751,8 +2757,8 @@ function getTeamCrestStackLayout(width, height, textMetrics, icon, iconOptions =
  const textHeight = Math.max(textMetrics && textMetrics.height ? textMetrics.height : 0, 1);
  const maxWidth = width * 0.78;
  const maxIconHeightByWidth = maxWidth / Math.max(iconAspectRatio, 0.0001);
- const baseIconHeight = Math.min(height * 0.5, maxIconHeightByWidth);
- const iconHeight = Math.min(baseIconHeight * Math.max(scale, 1), height * 0.66, maxIconHeightByWidth * 1.2);
+ const baseIconHeight = Math.min(Math.max(textHeight * 2.35, height * 0.35), height * 0.56, maxIconHeightByWidth);
+ const iconHeight = Math.min(baseIconHeight * Math.max(scale, 0.8), height * 0.66, maxIconHeightByWidth * 1.2);
  const iconWidth = iconHeight * iconAspectRatio;
  const gap = Math.max(height * 0.038, 18);
  const groupWidth = Math.max(textWidth, iconWidth);
@@ -2977,20 +2983,49 @@ async function buildSvgMarkup(font, text, width = 1600, height = 260, fill = "me
 </svg>`.trim();
  }
 
- const fontSize = fitSvgTextSize(
+ let fontSize = fitSvgTextSize(
   text,
   font.cssFamily,
   width * previewFit.widthRatio,
   height * previewFit.heightRatio,
   previewFit
  );
- const textBounds = measureSvgTextBounds(text, font.cssFamily, fontSize, width, height);
- const iconPlacement = getStandaloneIconPlacement(icon, width, height, textBounds, iconOptions);
+ let textX = width / 2;
+ let textY = height / 2;
+ let iconPlacement = getStandaloneIconPlacement(icon, width, height, null, iconOptions);
+
+ if(icon){
+  const compositeFit = fitSvgTextComposite(
+   text,
+   font.cssFamily,
+   icon,
+   width * previewFit.widthRatio,
+   height * previewFit.heightRatio,
+   previewFit,
+   iconOptions
+  );
+  fontSize = compositeFit.size;
+
+  const layout = compositeFit.layout;
+  const groupLeft = (width - compositeFit.combinedWidth) / 2;
+  const groupTop = (height - compositeFit.combinedHeight) / 2;
+  const textCenterXInGroup = (-layout.minX) + ((layout.box.x1 + layout.box.x2) / 2);
+  const textCenterYInGroup = (-layout.minY) + ((layout.box.y1 + layout.box.y2) / 2);
+
+  textX = groupLeft + textCenterXInGroup;
+  textY = groupTop + textCenterYInGroup;
+  iconPlacement = {
+   x:groupLeft + ((-layout.minX) + layout.iconLeft),
+   y:groupTop + ((-layout.minY) + layout.iconTop),
+   width:layout.iconWidth,
+   height:layout.iconHeight
+  };
+ }
 
  return `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block">
  ${fillConfig.defs}
- <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-family="${escapeXml(font.cssFamily)}" font-size="${fontSize}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}>${escapeXml(text)}</text>
+ <text x="${textX}" y="${textY}" text-anchor="middle" dominant-baseline="middle" font-family="${escapeXml(font.cssFamily)}" font-size="${fontSize}" fill="${fillConfig.fill}" ${fillConfig.extraAttrs}>${escapeXml(text)}</text>
  ${buildPositionedIconMarkup(icon, iconPlacement.x, iconPlacement.y, iconPlacement.height, fillConfig.fill, fillConfig.extraAttrs, iconOptions.rotation, { interactive:true })}
 </svg>`.trim();
 }
